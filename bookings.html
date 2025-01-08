@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Rental Booking</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<style>
+    /* General Styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f8f8;
+    color: #333;
+}
+
+.container {
+    width: 90%;
+    margin: 0 auto;
+    max-width: 1200px;
+}
+
+/* Bookings Section Styling */
+.booking-section {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 60px;
+    text-align: center;
+}
+
+.booking-section h2 {
+    font-size: 32px;
+    color: #f57300; /* Orange color */
+    margin-bottom: 20px;
+}
+
+.booking-section p {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 30px;
+}
+
+.booking-form {
+    display: grid;
+    gap: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.input-box {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.input-box label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.input-box input, .input-box select {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+}
+
+.input-box input:focus, .input-box select:focus {
+    border-color: #f57300; /* Orange color on focus */
+}
+
+.input-box input[type="date"] {
+    cursor: pointer;
+}
+
+/* Button Styling */
+.btn {
+    background-color: #f57300; /* Orange */
+    color: #fff;
+    padding: 12px 24px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #e36300; /* Darker Orange */
+}
+/* Confirmation Message Styling */
+.confirmation-message {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f0f8ff;  /* Light blue background */
+    color: #0078d4;  /* Blue text color */
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    display: none;  /* Initially hidden */
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .booking-form {
+        grid-template-columns: 1fr;
+    }
+
+    .input-box {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .booking-section h2 {
+        font-size: 28px;
+    }
+
+    .booking-section p {
+        font-size: 14px;
+    }
+}
+
+</style>
+<body>
+    <section id="booking" class="booking-section container">
+        <h2>Book Your Car</h2>
+        <p>Choose your vehicle and fill in the details to make a booking.</p>
+        
+        <form action="#" method="POST" class="booking-form" id="booking-form">
+            <div class="input-box">
+                <label for="car-model">Car Model</label>
+                <select id="car-model" name="car-model" required>
+                    <option value="">Select Car Model</option>
+                    <option value="Rolls-Royce">Rolls-Royce</option>
+                    <option value="Macan 4">Macan 4</option>
+                    <option value="Cayenne S">Cayenne S</option>
+                    <option value="Nissan GT-R">Nissan GT-R</option>
+                </select>
+            </div>
+
+            <div class="input-box">
+                <label for="pickup-date">Pick-up Date</label>
+                <input type="date" id="pickup-date" name="pickup-date" required>
+            </div>
+
+            <div class="input-box">
+                <label for="return-date">Return Date</label>
+                <input type="date" id="return-date" name="return-date" required>
+            </div>
+
+            <div class="input-box">
+                <label for="name">Your Name</label>
+                <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+            </div>
+
+            <div class="input-box">
+                <label for="email">Your Email</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+            </div>
+
+            <button type="submit" class="btn" id="book-btn" href="bookings.html">Book Now</button>
+        </form>
+
+        <!-- Confirmation Message -->
+        <div id="confirmation-message" class="confirmation-message"></div>
+    </section>
+
+    <script>
+        // Wait for the DOM to load completely
+document.addEventListener('DOMContentLoaded', function() {
+    // Get the booking form and button
+    const bookingForm = document.getElementById('booking-form');
+    const bookButton = document.getElementById('book-btn');
+    const confirmationMessage = document.getElementById('confirmation-message');
+
+    // When the form is submitted, prevent the default behavior
+    bookingForm.addEventListener('submit', function(event) {
+        event.preventDefault();  // Prevent form submission
+
+         // Redirect to the payment page
+         window.location.href = "payment.html";  // Direct to payment page
+    });
+});
+
+    </script>
+</body>
+</html>
+
+    

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Page</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script> <!-- QR Code Library -->
+</head>
+<style>
+    /* Keep the same styling from the original page */
+    .payment-section {
+        background-color: #fff;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-top: 60px;
+        text-align: center;
+    }
+
+    .payment-section h2 {
+        font-size: 32px;
+        color: #f57300; /* Orange color */
+        margin-bottom: 20px;
+    }
+
+    .payment-section p {
+        font-size: 16px;
+        color: #555;
+        margin-bottom: 30px;
+    }
+
+    .payment-form {
+        display: grid;
+        gap: 20px;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .input-box {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .input-box label {
+        font-size: 14px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 8px;
+    }
+
+    .input-box input {
+        width: 100%;
+        padding: 10px;
+        font-size: 14px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        outline: none;
+    }
+
+    .input-box input:focus {
+        border-color: #f57300; /* Orange color on focus */
+    }
+
+    .btn {
+        background-color: #f57300; /* Orange */
+        color: #fff;
+        padding: 12px 24px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+        background-color: #e36300; /* Darker Orange */
+    }
+
+    .confirmation-message {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #f0f8ff;
+        color: #0078d4;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 5px;
+        display: none;
+        text-align: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* QR Code Scanner Styling */
+    #qr-scanner-container {
+        margin-top: 40px;
+        padding: 20px;
+        background-color: #f8f8f8;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    #qr-reader {
+        width: 100%;
+        height: 300px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+    }
+
+    #qr-result {
+        margin-top: 20px;
+        padding: 10px;
+        background-color: #e8ffe8;
+        border-radius: 5px;
+        color: green;
+    }
+</style>
+
+<body>
+    <section class="payment-section container">
+        <h2>Complete Your Payment</h2>
+        <p>Please enter your payment details or scan a QR code to complete the payment.</p>
+        
+        <!-- Payment Form -->
+        <form action="#" method="POST" class="payment-form" id="payment-form">
+            <div class="input-box">
+                <label for="card-name">Name on Card</label>
+                <input type="text" id="card-name" name="card-name" placeholder="Enter cardholder's name" required>
+            </div>
+
+            <div class="input-box">
+                <label for="card-number">Card Number</label>
+                <input type="text" id="card-number" name="card-number" placeholder="Enter card number" required>
+            </div>
+
+            <div class="input-box">
+                <label for="expiration">Expiration Date</label>
+                <input type="month" id="expiration" name="expiration" required>
+            </div>
+
+            <div class="input-box">
+                <label for="cvv">CVV</label>
+                <input type="text" id="cvv" name="cvv" placeholder="Enter CVV" required>
+            </div>
+
+            <button type="submit" class="btn" id="pay-btn">Pay Now</button>
+        </form>
+
+        <!-- QR Code Scanner Section -->
+        <div id="qr-scanner-container">
+            <h3>Or scan a QR code to pay</h3>
+            <div id="qr-reader">
+                <img src="QRcode.jpg" alt="" height="300px" width="260px">
+            </div>
+            <div id="qr-result" style="display: none;">QR Code Scanned Successfully! Proceeding with Payment...</div>
+        </div>
+
+        <!-- Confirmation Message -->
+        <div id="payment-confirmation-message" class="confirmation-message"></div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const paymentForm = document.getElementById('payment-form');
+            const paymentButton = document.getElementById('pay-btn');
+            const confirmationMessage = document.getElementById('payment-confirmation-message');
+            const qrResult = document.getElementById('qr-result');
+            const qrReader = document.getElementById('qr-reader');
+
+            // Handle form submission
+            paymentForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                confirmationMessage.textContent = "Payment Successful! Your car will be delivered shortly.";
+                confirmationMessage.style.display = "block";
+            });
+
+            // Initialize QR Code Reader
+            const qrCodeScanner = new Html5Qrcode("qr-reader");
+
+            // Start QR Code scanning
+            qrCodeScanner.start(
+                { facingMode: "environment" }, // Use the rear camera
+                {
+                    fps: 10,    // Frames per second for scanning
+                    qrbox: 250  // Size of the scanning box
+                },
+                function(decodedText) {
+                    // Handle the QR code scan result
+                    qrResult.textContent = "QR Code Scanned Successfully! Proceeding with Payment...";
+                    qrResult.style.display = "block";
+
+                    // Optionally, trigger the payment confirmation
+                    setTimeout(function() {
+                        confirmationMessage.textContent = "Payment Successful via QR Code! Your car will be delivered shortly.";
+                        confirmationMessage.style.display = "block";
+                    }, 1500); // Delay the confirmation message to simulate processing time
+                },
+                function(errorMessage) {
+                    // Handle scanning errors (optional)
+                    console.error(errorMessage);
+                }
+            ).catch(function(error) {
+                console.error("QR Code scanner initialization failed: ", error);
+            });
+        });
+    </script>
+</body>
+</html>
