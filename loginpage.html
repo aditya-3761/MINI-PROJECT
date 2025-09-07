@@ -1,62 +1,168 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Log In - Car Rental</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Log In - Car Rental</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+  <style>
+    /* Base styles */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      background: #fff; /* White background */
+      color: #333; /* Dark text for readability */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      width: 100%;
+      max-width: 400px;
+    }
+    .login-box {
+      background: #fff;
+      padding: 40px 35px;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(255, 127, 39, 0.25); /* subtle orange shadow */
+      text-align: center;
+      border: 1.5px solid #ff7f27; /* orange border */
+    }
+    .login-box h2 {
+      margin-bottom: 28px;
+      font-weight: 600;
+      font-size: 2rem;
+      color: #ff7f27; /* Orange heading */
+      letter-spacing: 1px;
+    }
+    .input-box {
+      margin-bottom: 22px;
+      text-align: left;
+    }
+    label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: #555;
+    }
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 14px 16px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1.8px solid #ddd;
+      background: #fff;
+      color: #333;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    input[type="email"]:focus,
+    input[type="password"]:focus {
+      outline: none;
+      border-color: #ff7f27;
+      box-shadow: 0 0 6px rgba(255, 127, 39, 0.5);
+      background: #fff;
+    }
+    .btn {
+      width: 100%;
+      background: #ff7f27;
+      border: none;
+      padding: 16px 0;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1.15rem;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+      box-shadow: 0 6px 15px rgba(255, 127, 39, 0.4);
+    }
+    .btn:hover {
+      background: #e5721b;
+      transform: translateY(-2px);
+      box-shadow: 0 9px 22px rgba(229, 114, 27, 0.7);
+    }
+    .signup-link {
+      margin-top: 24px;
+      font-weight: 400;
+      color: #666;
+    }
+    .signup-link a {
+      color: #ff7f27;
+      font-weight: 600;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .signup-link a:hover {
+      color: #ffa84d;
+      text-decoration: underline;
+    }
+
+    /* Responsive */
+    @media (max-width: 450px) {
+      .login-box {
+        padding: 30px 20px;
+      }
+      .login-box h2 {
+        font-size: 1.75rem;
+      }
+    }
+  </style>
 </head>
 <body>
-<section class="login-section container">
+  <section class="login-section container">
     <div class="login-box">
-        <h2>Log In</h2>
-        <form id="login-form" class="login-form">
-            <div class="input-box">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" placeholder="Enter your email" required />
-            </div>
-            <div class="input-box">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="Enter your password" required />
-            </div>
-            <button type="submit" class="btn">Log In</button>
-        </form>
-        <p class="signup-link">Don't have an account? <a href="signup.html">Sign Up</a></p>
+      <h2>Log In</h2>
+      <form id="login-form" class="login-form">
+        <div class="input-box">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="Enter your email" required />
+        </div>
+        <div class="input-box">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="Enter your password" required />
+        </div>
+        <button type="submit" class="btn">Log In</button>
+      </form>
+      <p class="signup-link">Don't have an account? <a href="signup.html">Sign Up</a></p>
     </div>
-</section>
+  </section>
 
-<script>
+  <script>
     document.getElementById('login-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
+      e.preventDefault();
 
-        const email = document.getElementById('email').value.trim();
-        const password = document.getElementById('password').value;
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
 
-        if (!email || !password) {
-            alert('Please fill in both fields');
-            return;
+      if (!email || !password) {
+        alert('Please fill in both fields');
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          alert(data.message);
+          window.location.href = 'payment.html'; // Redirect after login
+        } else {
+          alert(data.error);
         }
-
-        try {
-            const res = await fetch('/api/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password })
-            });
-            const data = await res.json();
-
-            if (res.ok) {
-                alert(data.message);
-                window.location.href = 'payment.html'; // Redirect after login
-            } else {
-                alert(data.error);
-            }
-        } catch (error) {
-            alert('Error logging in');
-            console.error(error);
-        }
+      } catch (error) {
+        alert('Error logging in');
+        console.error(error);
+      }
     });
-</script>
+  </script>
 </body>
 </html>
