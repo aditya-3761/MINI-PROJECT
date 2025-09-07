@@ -1,175 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Car Rental</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Log In - Car Rental</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
 </head>
-<style>
-    /* Basic Reset */
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    body {
-        font-family: 'Poppins', sans-serif;
-        background: linear-gradient(to right, #FF7E5F, #FEB47B);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        background-size: cover;
-    }
-
-    .login-section {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        height: 100%;
-    }
-
-    .login-box {
-        background-color: rgba(255, 255, 255, 0.9);
-        padding: 40px;
-        border-radius: 10px;
-        width: 100%;
-        max-width: 400px;
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        text-align: center;
-    }
-
-    h2 {
-        font-size: 2rem;
-        font-weight: 600;
-        margin-bottom: 30px;
-        color: #333;
-    }
-
-    .input-box {
-        margin-bottom: 20px;
-        text-align: left;
-    }
-
-    .input-box input {
-        width: 100%;
-        padding: 12px;
-        border: 2px solid #ddd;
-        border-radius: 5px;
-        font-size: 1rem;
-        color: #333;
-        background-color: #fff;
-        transition: border-color 0.3s ease;
-    }
-
-    .input-box input:focus {
-        border-color: #FF7E5F;
-        outline: none;
-    }
-
-    .remember-me {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        margin-bottom: 20px;
-    }
-
-    .remember-me input {
-        margin-right: 10px;
-    }
-
-    .btn {
-        width: 100%;
-        padding: 14px;
-        border: none;
-        border-radius: 5px;
-        background-color: #FF7E5F;
-        color: white;
-        font-size: 1.1rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-
-    .btn:hover {
-        background-color: #D96D4B;
-    }
-
-    .forgot-password {
-        margin-top: 10px;
-    }
-
-    .forgot-password a {
-        text-decoration: none;
-        color: #FF7E5F;
-        font-size: 0.9rem;
-    }
-
-    .forgot-password a:hover {
-        text-decoration: underline;
-    }
-
-    .signup-link {
-        margin-top: 20px;
-    }
-
-    .signup-link a {
-        text-decoration: none;
-        color: #FF7E5F;
-        font-weight: 600;
-    }
-
-    .signup-link a:hover {
-        text-decoration: underline;
-    }
-
-    @media (max-width: 480px) {
-        .login-box {
-            width: 90%;
-            padding: 20px;
-        }
-
-        h2 {
-            font-size: 1.6rem;
-        }
-
-        .btn {
-            font-size: 1rem;
-        }
-    }
-</style>
 <body>
-    <section id="login" class="login-section container">
-        <div class="login-box">
-            <h2>Login to Your Account</h2>
-            <form id="login-form" class="login-form">
-                <div class="input-box">
-                    <label for="name">Full Name</label>
-                    <input type="text" id="name" name="name" placeholder="Enter your full name" required>
-                </div>
-                <div class="input-box">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
-                </div>
-                <div class="input-box">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
-                </div>
-                <div class="remember-me">
-                    <input type="checkbox" id="remember">
-                    <label for="remember">Remember me</label>
-                </div>
-                <button type="submit" class="btn">Login</button>
-                <p class="forgot-password"><a href="#">Forgot your password?</a></p>
-            </form>
-            <p class="signup-link">Don't have an account? <a href="signup.html">Sign up</a></p>
-        </div>
-    </section>
+<section class="login-section container">
+    <div class="login-box">
+        <h2>Log In</h2>
+        <form id="login-form" class="login-form">
+            <div class="input-box">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required />
+            </div>
+            <div class="input-box">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required />
+            </div>
+            <button type="submit" class="btn">Log In</button>
+        </form>
+        <p class="signup-link">Don't have an account? <a href="signup.html">Sign Up</a></p>
+    </div>
+</section>
 
-    <script src="login.js"></script>
+<script>
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+
+        if (!email || !password) {
+            alert('Please fill in both fields');
+            return;
+        }
+
+        try {
+            const res = await fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+            const data = await res.json();
+
+            if (res.ok) {
+                alert(data.message);
+                window.location.href = 'payment.html'; // Redirect after login
+            } else {
+                alert(data.error);
+            }
+        } catch (error) {
+            alert('Error logging in');
+            console.error(error);
+        }
+    });
+</script>
 </body>
 </html>
