@@ -1,154 +1,131 @@
-// server.js
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const ExcelJS = require('exceljs');
-const fs = require('fs');
 
 const app = express();
 const PORT = 3000;
 
-app.use(bodyParser.json());
+// Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static('public')); // serve static files
+app.use(bodyParser.json());
 
-const USERS_FILE = path.join(__dirname, 'users.xlsx');
-const PAYMENTS_FILE = path.join(__dirname, 'payments.xlsx');
+// Serve static files from 'public' directory
+app.use(express.static(path.join(__dirname, 'public')));
 
-async function createUsersFileIfNotExist() {
-    if (!fs.existsSync(USERS_FILE)) {
-        const workbook = new ExcelJS.Workbook();
-        const worksheet = workbook.addWorksheet('Users');
-        worksheet.columns = [
-            { header: 'Full Name', key: 'fullname', width: 30 },
-            { header: 'Email', key: 'email', width: 30 },
-            { header: 'Password', key: 'password', width: 30 },
-            { header: 'Date Registered', key: 'date', width: 25 }
-        ];
-        await workbook.xlsx.writeFile(USERS_FILE);
-        console.log('Created users.xlsx');
-    }
+// Excel file path
+const excelFilePath = path.join(__dirname, 'data.xlsx');
+
+async function initializeExcelFile() {
+  const workbook = new ExcelJS.Workbook();
+  try {
+    await workbook.xlsx.readFile(excelFilePath);
+  } catch (err) {
+    const worksheet = workbook.addWorksheet('Users');
+    worksheet.addRow(['Full Name', 'Email', 'Password', 'Date', 'Payment ID']);
+    await workbook.xlsx.writeFile(excelFilePath);
+  }
 }
-
-async function createPaymentsFileIfNotExist() {
-    if (!fs.existsSync(PAYMENTS_FILE)) {
-        const workbook = new ExcelJS.Workbook();
-        const worksheet = workbook.addWorksheet('Payments');
-        worksheet.columns = [
-            { header: 'Name on Card', key: 'name', width: 30 },
-            { header: 'Card Number', key: 'cardNumber', width: 25 },
-            { header: 'Expiration Date', key: 'expiration', width: 20 },
-            { header: 'CVV', key: 'cvv', width: 10 },
-            { header: 'Payment Date', key: 'date', width: 25 }
-        ];
-        await workbook.xlsx.writeFile(PAYMENTS_FILE);
-        console.log('Created payments.xlsx');
-    }
-}
-
-async function readUsers() {
-    const workbook = new ExcelJS.Workbook();
-    await workbook.xlsx.readFile(USERS_FILE);
-    const worksheet = workbook.getWorksheet('Users');
-    const users = [];
-    worksheet.eachRow((row, rowNumber) => {
-        if (rowNumber === 1) return; // skip header
-        users.push({
-            fullname: row.getCell(1).value,
-            email: row.getCell(2).value,
-            password: row.getCell(3).value,
-            date: row.getCell(4).value
-        });
-    });
-    return users;
-}
-
-async function addUser(user) {
-    const workbook = new ExcelJS.Workbook();
-    await workbook.xlsx.readFile(USERS_FILE);
-    const worksheet = workbook.getWorksheet('Users');
-    worksheet.addRow(user);
-    await workbook.xlsx.writeFile(USERS_FILE);
-}
-
-async function addPayment(payment) {
-    const workbook = new ExcelJS.Workbook();
-    await workbook.xlsx.readFile(PAYMENTS_FILE);
-    const worksheet = workbook.getWorksheet('Payments');
-    worksheet.addRow(payment);
-    await workbook.xlsx.writeFile(PAYMENTS_FILE);
-}
+initializeExcelFile();
 
 // Routes
 
-// Signup
-app.post('/api/signup', async (req, res) => {
-    const { fullname, email, password } = req.body;
-    if (!fullname || !email || !password) {
-        return res.status(400).json({ error: 'All fields are required.' });
-    }
+// Root route serves index.html by default via static middleware, no need for explicit get('/')
 
-    await createUsersFileIfNotExist();
-    const users = await readUsers();
+// Signup POST handler
+app.post('/signup', async (req, res) => {
+  const { fullname, email, password, confpassword } = req.body;
+  if (!fullname || !email || !password || !confpassword) {
+    return res.status(400).send('All fields are required.');
+  }
+  if (password !== confpassword) {
+    return res.status(400).send('Passwords do not match.');
+  }
 
-    if (users.find(u => u.email.toLowerCase() === email.toLowerCase())) {
-        return res.status(400).json({ error: 'Email already registered.' });
-    }
+  try {
+    const workbook = new ExcelJS.Workbook();
+    await workbook.xlsx.readFile(excelFilePath);
+    const worksheet = workbook.getWorksheet('Users');
+    worksheet.addRow([fullname, email, password, new Date().toLocaleString(), '']);
+    await workbook.xlsx.writeFile(excelFilePath);
 
-    await addUser({
-        fullname,
-        email,
-        password, // Note: For production, hash passwords!
-        date: new Date().toLocaleString()
+    res.send('Signup successful! <a href="/loginpage.html">Login here</a>.');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+// Login POST handler
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(400).send('Email and password are required.');
+  }
+
+  try {
+    const workbook = new ExcelJS.Workbook();
+    await workbook.xlsx.readFile(excelFilePath);
+    const worksheet = workbook.getWorksheet('Users');
+
+    let isAuthenticated = false;
+    worksheet.eachRow((row, rowNumber) => {
+      if (rowNumber === 1) return; // skip header
+      if (row.getCell(2).value === email && row.getCell(3).value === password) {
+        isAuthenticated = true;
+      }
     });
 
-    res.json({ message: 'Signup successful!' });
+    if (isAuthenticated) {
+      res.send('Login successful!');
+    } else {
+      res.status(401).send('Invalid email or password.');
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
 });
 
-// Login
-app.post('/api/login', async (req, res) => {
-    const { email, password } = req.body;
-    if (!email || !password) {
-        return res.status(400).json({ error: 'Email and password are required.' });
-    }
+// Payment POST handler
+app.post('/payment', async (req, res) => {
+  const { fullname, email, paymentId } = req.body;
+  if (!fullname || !email || !paymentId) {
+    return res.status(400).send('All payment fields are required.');
+  }
 
-    await createUsersFileIfNotExist();
-    const users = await readUsers();
+  try {
+    const workbook = new ExcelJS.Workbook();
+    await workbook.xlsx.readFile(excelFilePath);
+    const worksheet = workbook.getWorksheet('Users');
 
-    const user = users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
-    if (!user) {
-        return res.status(401).json({ error: 'Invalid email or password.' });
-    }
-
-    res.json({ message: 'Login successful!', fullname: user.fullname });
-});
-
-// Payment
-app.post('/api/payment', async (req, res) => {
-    const { name, cardNumber, expiration, cvv } = req.body;
-
-    if (!name || !cardNumber || !expiration || !cvv) {
-        return res.status(400).json({ error: 'All payment fields are required.' });
-    }
-
-    await createPaymentsFileIfNotExist();
-
-    await addPayment({
-        name,
-        cardNumber,
-        expiration,
-        cvv,
-        date: new Date().toLocaleString()
+    let userFound = false;
+    worksheet.eachRow((row, rowNumber) => {
+      if (rowNumber === 1) return; // skip header
+      if (row.getCell(2).value === email) {
+        row.getCell(5).value = paymentId; // update payment id
+        userFound = true;
+      }
     });
 
-    res.json({ message: 'Payment successful!' });
+    if (!userFound) {
+      worksheet.addRow([fullname, email, '', new Date().toLocaleString(), paymentId]);
+    }
+
+    await workbook.xlsx.writeFile(excelFilePath);
+    res.send('Payment information saved successfully!');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
 });
 
-// Serve index.html by default
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+// 404 handler for any other route
+app.use((req, res) => {
+  res.status(404).send('404 Not Found');
 });
 
+// Start server
 app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });
