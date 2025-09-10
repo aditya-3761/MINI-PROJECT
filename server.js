@@ -2,9 +2,11 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const ExcelJS = require('exceljs');
-
+const cors = require('cors');
 const app = express();
 const PORT = 3000;
+
+app.use(cors());
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -54,6 +56,32 @@ app.post('/signup', async (req, res) => {
     console.error(error);
     res.status(500).send('Internal Server Error');
   }
+});
+app.post('/api/bookings', (req, res) => {
+  const {  carModel, pickupDate, returnDate, name, email } = req.body; 
+  if (!carModel || !pickupDate || !returnDate || !name || !email) { 
+    return res.status(400).json({ message: 'All fields are required.' });
+
+    }   
+   
+    // Here you can add code to save the booking data to a database or file
+
+    const workbook = new ExcelJS.Workbook();
+    workbook.xlsx.readFile(excelFilePath)
+    .then(() => {
+        const worksheet = workbook.getWorksheet('Bookings') || workbook.addWorksheet('Bookings');
+        worksheet.addRow([carModel, pickupDate, returnDate, name, email, new Date().toLocaleString()]);
+        return workbook.xlsx.writeFile(excelFilePath);
+    })
+    .then(() => {
+        res.status(200).json({ message: 'Booking successful!' });
+    })
+    .catch((error) => {
+        console.error('Error saving booking:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    });
+    console.log('Booking received:', req.body);
+    res.status(200).json({ message: 'Booking successful!' });
 });
 
 // Login POST handler

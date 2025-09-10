@@ -37,6 +37,23 @@ if (newsletterForm) {
             });
 
             if (response.ok) {
+                // Safely handle JSON parsing only if content exists and is JSON
+                const contentType = response.headers.get('content-type');
+                let data = null;
+
+                if (contentType && contentType.includes('application/json')) {
+                    const text = await response.text();
+                    if (text) {
+                        try {
+                            data = JSON.parse(text);
+                        } catch (err) {
+                            console.warn('Could not parse JSON:', err);
+                        }
+                    }
+                }
+
+                // Optionally, do something with `data` here if needed
+
                 alert('Thanks for subscribing!');
                 emailInput.value = '';
             } else if (response.status === 409) {

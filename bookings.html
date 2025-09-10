@@ -139,38 +139,78 @@
     </form>
   </section>
 
-  <script>
-    document.getElementById('booking-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
+<script>
+  document.getElementById('booking-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-      const carModel = document.getElementById('car-model').value;
-      const pickupDate = document.getElementById('pickup-date').value;
-      const returnDate = document.getElementById('return-date').value;
-      const name = document.getElementById('name').value.trim();
-      const email = document.getElementById('email').value.trim();
+    const carModel = document.getElementById('car-model').value;
+    const pickupDate = document.getElementById('pickup-date').value;
+    const returnDate = document.getElementById('return-date').value;
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
 
-      if (new Date(pickupDate) > new Date(returnDate)) {
-        alert('Return date must be after pickup date.');
+    // Frontend validation
+    if (!carModel) {
+      alert('Please select a car model.');
+      return;
+    }
+    if (!pickupDate) {
+      alert('Please select a pickup date.');
+      return;
+    }
+    if (!returnDate) {
+      alert('Please select a return date.');
+      return;
+    }
+    if (new Date(pickupDate) > new Date(returnDate)) {
+      alert('Return date must be after pickup date.');
+      return;
+    }
+    if (!name) {
+      alert('Please enter your full name.');
+      return;
+    }
+    if (!email) {
+      alert('Please enter your email.');
+      return;
+    }
+
+    try {
+      const res = await fetch('http://localhost:3000/api/bookings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ carModel, pickupDate, returnDate, name, email }),
+      });
+
+      const text = await res.text();
+
+      let data = null;
+      if (text) {
+        try {
+          data = JSON.parse(text);
+        } catch (err) {
+          console.warn('Failed to parse JSON:', err);
+        }
+      }
+
+      if (!res.ok) {
+        // Use message from server if available
+        const errorMessage = data && data.message ? data.message : 'Booking failed. Please try again.';
+        alert(errorMessage);
         return;
       }
 
-      try {
-        const res = await fetch('/api/bookings', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ carModel, pickupDate, returnDate, name, email }),
-        });
+      // Success
+      alert(data && data.message ? data.message : 'Booking successful!');
+      console.log('Booking response:', data);
+      e.target.reset();
+      window.location.href = 'payment.html'; // Redirect to payment page
 
-        const data = await res.json();
-        alert(data.message);
-
-        if (res.ok) {
-          e.target.reset();
-        }
-      } catch (err) {
-        alert('Error: ' + err.message);
-      }
-    });
-  </script>
+    } catch (err) {
+      alert('Error: ' + err.message);
+      console.log(err)
+    }
+  });
+</script>
 </body>
 </html>
