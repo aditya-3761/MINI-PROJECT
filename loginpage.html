@@ -1,168 +1,534 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Log In - Car Rental</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
-  <style>
-    /* Base styles */
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'Poppins', sans-serif;
-      margin: 0;
-      background: #fff; /* White background */
-      color: #333; /* Dark text for readability */
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      padding: 20px;
-    }
-    .container {
-      width: 100%;
-      max-width: 400px;
-    }
-    .login-box {
-      background: #fff;
-      padding: 40px 35px;
-      border-radius: 12px;
-      box-shadow: 0 6px 18px rgba(255, 127, 39, 0.25); /* subtle orange shadow */
-      text-align: center;
-      border: 1.5px solid #ff7f27; /* orange border */
-    }
-    .login-box h2 {
-      margin-bottom: 28px;
-      font-weight: 600;
-      font-size: 2rem;
-      color: #ff7f27; /* Orange heading */
-      letter-spacing: 1px;
-    }
-    .input-box {
-      margin-bottom: 22px;
-      text-align: left;
-    }
-    label {
-      display: block;
-      font-weight: 500;
-      margin-bottom: 8px;
-      color: #555;
-    }
-    input[type="email"],
-    input[type="password"] {
-      width: 100%;
-      padding: 14px 16px;
-      font-size: 1rem;
-      border-radius: 8px;
-      border: 1.8px solid #ddd;
-      background: #fff;
-      color: #333;
-      transition: border-color 0.3s, box-shadow 0.3s;
-    }
-    input[type="email"]:focus,
-    input[type="password"]:focus {
-      outline: none;
-      border-color: #ff7f27;
-      box-shadow: 0 0 6px rgba(255, 127, 39, 0.5);
-      background: #fff;
-    }
-    .btn {
-      width: 100%;
-      background: #ff7f27;
-      border: none;
-      padding: 16px 0;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 1.15rem;
-      color: #fff;
-      cursor: pointer;
-      transition: background 0.3s, transform 0.2s;
-      box-shadow: 0 6px 15px rgba(255, 127, 39, 0.4);
-    }
-    .btn:hover {
-      background: #e5721b;
-      transform: translateY(-2px);
-      box-shadow: 0 9px 22px rgba(229, 114, 27, 0.7);
-    }
-    .signup-link {
-      margin-top: 24px;
-      font-weight: 400;
-      color: #666;
-    }
-    .signup-link a {
-      color: #ff7f27;
-      font-weight: 600;
-      text-decoration: none;
-      transition: color 0.3s;
-    }
-    .signup-link a:hover {
-      color: #ffa84d;
-      text-decoration: underline;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Log In - Rento</title>
+    <link rel="icon" href="logo3.jpg" type="image/png">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet' />
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-    /* Responsive */
-    @media (max-width: 450px) {
-      .login-box {
-        padding: 30px 20px;
-      }
-      .login-box h2 {
-        font-size: 1.75rem;
-      }
-    }
-  </style>
-</head>
-<body>
-  <section class="login-section container">
-    <div class="login-box">
-      <h2>Log In</h2>
-      <form id="login-form" class="login-form">
-        <div class="input-box">
-          <label for="email">Email</label>
-          <input type="email" id="email" name="email" placeholder="Enter your email" required />
-        </div>
-        <div class="input-box">
-          <label for="password">Password</label>
-          <input type="password" id="password" name="password" placeholder="Enter your password" required />
-        </div>
-        <button type="submit" class="btn">Log In</button>
-      </form>
-      <p class="signup-link">Don't have an account? <a href="signup.html">Sign Up</a></p>
-    </div>
-  </section>
-
-  <script>
-    document.getElementById('login-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value;
-
-      if (!email || !password) {
-        alert('Please fill in both fields');
-        return;
-      }
-
-      try {
-        const res = await fetch('/api/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password })
-        });
-        const data = await res.json();
-
-        if (res.ok) {
-          alert(data.message);
-          window.location.href = 'payment.html'; // Redirect after login
-        } else {
-          alert(data.error);
+        :root {
+            --primary: #ff6b00;
+            --primary-dark: #e05500;
+            --primary-light: #ff8c38;
+            --primary-bg: rgba(255,107,0,0.08);
+            --white: #ffffff;
+            --bg: #f7f5f2;
+            --bg2: #faf9f7;
+            --border: rgba(0,0,0,0.08);
+            --border-hover: rgba(255,107,0,0.35);
+            --text: #1a1a1a;
+            --text-muted: #666;
+            --text-dim: #aaa;
+            --font-display: 'Syne', sans-serif;
+            --font-body: 'DM Sans', sans-serif;
+            --ease: cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow-sm: 0 2px 12px rgba(0,0,0,0.06);
+            --shadow-md: 0 8px 32px rgba(0,0,0,0.10);
+            --shadow-lg: 0 24px 64px rgba(0,0,0,0.10);
+            --shadow-orange: 0 8px 32px rgba(255,107,0,0.28);
         }
-      } catch (error) {
-        alert('Error logging in');
-        console.error(error);
-      }
-    });
-  </script>
+
+        html { scroll-behavior: smooth; }
+        body { background: var(--bg); color: var(--text); font-family: var(--font-body); overflow-x: hidden; cursor: none; min-height: 100vh; }
+
+        /* ===== CURSOR ===== */
+        .cursor { width: 10px; height: 10px; background: var(--primary); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: transform 0.15s var(--ease); }
+        .cursor-follower { width: 34px; height: 34px; border: 1.5px solid rgba(255,107,0,0.4); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: width 0.3s, height 0.3s; }
+        .cursor.hovered { transform: translate(-50%,-50%) scale(2.2); background: var(--primary-dark); }
+        .cursor-follower.hovered { width: 54px; height: 54px; border-color: var(--primary); opacity: 0.4; }
+
+        /* ===== HEADER ===== */
+        header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; transition: all 0.4s var(--ease); }
+        header.scrolled { background: rgba(255,255,255,0.94); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); box-shadow: 0 1px 0 rgba(0,0,0,0.08), var(--shadow-sm); }
+        .nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 48px; max-width: 1380px; margin: 0 auto; }
+        .logo { font-family: var(--font-display); font-size: 26px; font-weight: 800; color: var(--text); text-decoration: none; letter-spacing: -1px; }
+        .logo span { color: var(--primary); }
+        .navbar { display: flex; align-items: center; gap: 4px; }
+        .nav-link { color: var(--text-muted); text-decoration: none; font-size: 14px; font-weight: 500; padding: 8px 14px; border-radius: 8px; transition: all 0.25s var(--ease); position: relative; }
+        .nav-link::after { content: ''; position: absolute; bottom: 3px; left: 50%; transform: translateX(-50%) scaleX(0); width: 14px; height: 2px; background: var(--primary); border-radius: 99px; transition: transform 0.25s var(--ease); }
+        .nav-link:hover { color: var(--text); background: var(--primary-bg); }
+        .nav-link:hover::after { transform: translateX(-50%) scaleX(1); }
+        .nav-icons { display: flex; align-items: center; gap: 4px; }
+        .nav-icons a { width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); text-decoration: none; font-size: 18px; border-radius: 10px; transition: all 0.25s var(--ease); }
+        .nav-icons a:hover { color: var(--primary); background: var(--primary-bg); }
+        .menu-icons { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 8px; }
+        .menu-icons div { width: 22px; height: 1.5px; background: var(--text); border-radius: 99px; transition: all 0.3s var(--ease); }
+        .menu-icons.active .line1 { transform: translateY(6.5px) rotate(45deg); }
+        .menu-icons.active .line2 { opacity: 0; }
+        .menu-icons.active .line3 { transform: translateY(-6.5px) rotate(-45deg); }
+
+        /* ===== PAGE LAYOUT ===== */
+        .page-wrapper {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            padding-top: 80px;
+        }
+
+        /* ===== LEFT PANEL ===== */
+        .left-panel {
+            background: var(--primary);
+            position: relative; overflow: hidden;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: flex-start;
+            padding: 80px 64px;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* Dot grid on left */
+        .left-panel::before {
+            content: '';
+            position: absolute; inset: 0;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.12) 1px, transparent 1px);
+            background-size: 28px 28px;
+            pointer-events: none;
+        }
+
+        /* Glow blob */
+        .left-panel::after {
+            content: '';
+            position: absolute; bottom: -100px; right: -100px;
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 65%);
+            border-radius: 50%; pointer-events: none;
+            animation: blobPulse 4s ease-in-out infinite;
+        }
+        @keyframes blobPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.1)} }
+
+        .left-content { position: relative; z-index: 1; }
+
+        .left-tag {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.25);
+            color: #fff; font-size: 11px; font-weight: 700;
+            letter-spacing: 2px; text-transform: uppercase;
+            padding: 6px 14px; border-radius: 99px; margin-bottom: 28px;
+        }
+        .left-tag .dot { width: 6px; height: 6px; background: #fff; border-radius: 50%; animation: blink 1.4s infinite; }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+        .left-panel h2 {
+            font-family: var(--font-display);
+            font-size: clamp(36px, 4vw, 54px);
+            font-weight: 800; letter-spacing: -2px;
+            color: #fff; line-height: 1.05;
+            margin-bottom: 20px;
+        }
+        .left-panel h2 .outline {
+            -webkit-text-stroke: 1.5px rgba(255,255,255,0.5);
+            color: transparent;
+        }
+
+        .left-panel p { color: rgba(255,255,255,0.75); font-size: 15px; line-height: 1.75; max-width: 380px; margin-bottom: 40px; }
+
+        /* Perks list */
+        .perks { display: flex; flex-direction: column; gap: 16px; margin-bottom: 48px; }
+        .perk { display: flex; align-items: center; gap: 14px; }
+        .perk-icon { width: 38px; height: 38px; background: rgba(255,255,255,0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .perk-icon i { font-size: 18px; color: #fff; }
+        .perk-text { font-size: 14px; color: rgba(255,255,255,0.9); font-weight: 500; }
+
+        /* Car image on left */
+        .left-car {
+            position: absolute; bottom: 40px; right: -20px;
+            width: 68%; opacity: 0.92;
+            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.25));
+            animation: floatY 4s ease-in-out infinite;
+        }
+        @keyframes floatY { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)} }
+
+        /* Stats row */
+        .left-stats { display: flex; gap: 32px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.2); }
+        .left-stat .num { font-family: var(--font-display); font-size: 26px; font-weight: 800; color: #fff; letter-spacing: -1px; }
+        .left-stat .lbl { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 2px; }
+
+        /* ===== RIGHT PANEL ===== */
+        .right-panel {
+            background: var(--white);
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            padding: 64px 72px;
+            position: relative;
+        }
+
+        .right-panel::before {
+            content: '';
+            position: absolute; top: 0; left: 0; bottom: 0; width: 1px;
+            background: linear-gradient(to bottom, transparent, var(--border), transparent);
+        }
+
+        .form-wrap { width: 100%; max-width: 380px; animation: slideUp 0.7s var(--ease) 0.2s both; }
+
+        /* Breadcrumb */
+        .breadcrumb { display: flex; align-items: center; gap: 8px; margin-bottom: 36px; }
+        .breadcrumb a { color: var(--text-muted); text-decoration: none; font-size: 13px; transition: color 0.2s; }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: var(--text-dim); font-size: 13px; }
+        .breadcrumb i { color: var(--text-dim); font-size: 12px; }
+
+        .form-wrap h2 { font-family: var(--font-display); font-size: 32px; font-weight: 800; letter-spacing: -1.2px; color: var(--text); margin-bottom: 6px; }
+        .form-wrap .sub { color: var(--text-muted); font-size: 14px; margin-bottom: 36px; }
+
+        /* Social login */
+        .social-login { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 28px; }
+        .social-btn {
+            display: flex; align-items: center; justify-content: center; gap: 9px;
+            padding: 11px 16px; border-radius: 12px;
+            border: 1.5px solid var(--border); background: var(--bg2);
+            color: var(--text-muted); font-size: 13px; font-weight: 600;
+            font-family: var(--font-body); cursor: pointer;
+            transition: all 0.25s var(--ease); text-decoration: none;
+        }
+        .social-btn i { font-size: 18px; }
+        .social-btn:hover { border-color: var(--border-hover); color: var(--text); background: var(--white); box-shadow: var(--shadow-sm); transform: translateY(-1px); }
+
+        /* Divider */
+        .divider { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; }
+        .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+        .divider span { font-size: 12px; color: var(--text-dim); font-weight: 500; white-space: nowrap; }
+
+        /* Form fields */
+        .form-group { margin-bottom: 18px; }
+        label { display: block; font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 7px; }
+        .input-wrap { position: relative; }
+        .input-wrap .icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 18px; color: var(--text-dim); pointer-events: none; transition: color 0.2s; }
+        .input-wrap .eye-btn { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); font-size: 18px; color: var(--text-dim); background: none; border: none; cursor: pointer; padding: 0; transition: color 0.2s; }
+        .input-wrap .eye-btn:hover { color: var(--primary); }
+        .input-wrap:focus-within .icon { color: var(--primary); }
+
+        input[type="email"], input[type="password"], input[type="text"] {
+            width: 100%; padding: 13px 44px 13px 44px;
+            font-size: 14px; border-radius: 12px;
+            border: 1.5px solid var(--border);
+            background: var(--bg2); color: var(--text);
+            transition: all 0.3s var(--ease);
+            font-family: var(--font-body); outline: none;
+        }
+        input:focus { border-color: var(--primary); background: var(--white); box-shadow: 0 0 0 3px rgba(255,107,0,0.1); }
+        input::placeholder { color: var(--text-dim); }
+
+        .field-error { font-size: 12px; color: #e53935; margin-top: 5px; display: none; }
+        .form-group.error input { border-color: #e53935; }
+        .form-group.error .field-error { display: block; }
+
+        /* Forgot + remember row */
+        .form-row-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+        .remember { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+        .remember input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--primary); cursor: pointer; }
+        .remember span { font-size: 13px; color: var(--text-muted); }
+        .forgot-link { font-size: 13px; color: var(--primary); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+        .forgot-link:hover { color: var(--primary-dark); text-decoration: underline; }
+
+        /* Submit */
+        .btn-submit {
+            width: 100%; background: var(--primary); border: none;
+            padding: 15px; border-radius: 14px;
+            font-weight: 700; font-size: 15px; color: #fff; cursor: pointer;
+            transition: all 0.3s var(--ease); box-shadow: var(--shadow-orange);
+            font-family: var(--font-body);
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            position: relative; overflow: hidden;
+        }
+        .btn-submit::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent); opacity: 0; transition: opacity 0.3s; }
+        .btn-submit:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 14px 40px rgba(255,107,0,0.4); }
+        .btn-submit:hover::before { opacity: 1; }
+        .btn-submit:active { transform: translateY(0); }
+
+        /* Password strength */
+        .strength-bar { height: 3px; border-radius: 99px; background: var(--border); margin-top: 8px; overflow: hidden; }
+        .strength-fill { height: 100%; width: 0; border-radius: 99px; transition: width 0.4s var(--ease), background 0.4s; }
+
+        /* Signup link */
+        .signup-link { text-align: center; margin-top: 24px; font-size: 14px; color: var(--text-muted); }
+        .signup-link a { color: var(--primary); font-weight: 600; text-decoration: none; transition: color 0.2s; }
+        .signup-link a:hover { color: var(--primary-dark); text-decoration: underline; }
+
+        /* Terms */
+        .terms { text-align: center; margin-top: 16px; font-size: 12px; color: var(--text-dim); line-height: 1.6; }
+        .terms a { color: var(--primary); text-decoration: none; }
+
+        /* SCROLL TOP */
+        .scroll-top { position: fixed; bottom: 28px; right: 28px; width: 46px; height: 46px; background: var(--primary); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 20px; border: none; cursor: pointer; z-index: 100; box-shadow: var(--shadow-orange); transform: translateY(100px); transition: all 0.4s var(--ease); }
+        .scroll-top.show { transform: translateY(0); }
+        .scroll-top:hover { background: var(--primary-dark); transform: translateY(-3px); }
+
+        /* ANIMATIONS */
+        @keyframes slideUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:none} }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            .navbar { position: fixed; top: 0; right: -100%; width: 270px; height: 100vh; background: var(--white); border-left: 1px solid var(--border); flex-direction: column; padding: 90px 28px 36px; gap: 2px; transition: right 0.4s var(--ease); z-index: 999; box-shadow: -8px 0 32px rgba(0,0,0,0.08); }
+            .navbar.open { right: 0; }
+            .menu-icons { display: flex; z-index: 1001; }
+            .nav-link { padding: 12px 14px; font-size: 15px; }
+            .nav { padding: 16px 24px; }
+            .page-wrapper { grid-template-columns: 1fr; }
+            .left-panel { display: none; }
+            .right-panel { padding: 48px 28px 64px; min-height: calc(100vh - 80px); }
+            .form-wrap { max-width: 100%; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-follower" id="cursorFollower"></div>
+    <button class="scroll-top" id="scrollTop"><i class='bx bx-up-arrow-alt'></i></button>
+
+    <!-- HEADER -->
+    <header id="header">
+        <div class="nav">
+            <a href="index.html" class="logo">Rento<span>.</span></a>
+            <div class="navbar" id="navbar">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="index.html#trending" class="nav-link">Trending</a>
+                <a href="index.html#rentals" class="nav-link">Cars</a>
+                <a href="index.html#team" class="nav-link">Team</a>
+                <a href="index.html#reviews" class="nav-link">Reviews</a>
+                <a href="bookings.html" class="nav-link">Bookings</a>
+                <a href="customerpage.html" class="nav-link">Customer Support</a>
+            </div>
+            <div class="nav-icons">
+                <a href="#"><i class='bx bx-search'></i></a>
+                <a href="loginpage.html"><i class='bx bx-user user-icon'></i></a>
+                <div class="menu-icons" id="menuIcons">
+                    <div class="line1"></div>
+                    <div class="line2"></div>
+                    <div class="line3"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- PAGE -->
+    <div class="page-wrapper">
+
+        <!-- LEFT PANEL -->
+        <div class="left-panel">
+            <div class="left-content">
+                <div class="left-tag"><span class="dot"></span> Premium Car Rentals</div>
+                <h2>
+                    Welcome<br>
+                    Back to<br>
+                    <span class="outline">Rento.</span>
+                </h2>
+                <p>Log in to manage your bookings, track your rentals, and access exclusive member deals.</p>
+
+                <div class="perks">
+                    <div class="perk">
+                        <div class="perk-icon"><i class='bx bx-calendar-check'></i></div>
+                        <div class="perk-text">Manage all your bookings in one place</div>
+                    </div>
+                    <div class="perk">
+                        <div class="perk-icon"><i class='bx bx-badge-check'></i></div>
+                        <div class="perk-text">Access exclusive member discounts</div>
+                    </div>
+                    <div class="perk">
+                        <div class="perk-icon"><i class='bx bx-support'></i></div>
+                        <div class="perk-text">Priority customer support 6 days a week</div>
+                    </div>
+                </div>
+
+                <div class="left-stats">
+                    <div class="left-stat"><div class="num">50+</div><div class="lbl">Premium Cars</div></div>
+                    <div class="left-stat"><div class="num">10k+</div><div class="lbl">Happy Clients</div></div>
+                    <div class="left-stat"><div class="num">15+</div><div class="lbl">Cities</div></div>
+                </div>
+            </div>
+
+            <!-- Car silhouette -->
+            <img src="home.png" alt="Car" class="left-car">
+        </div>
+
+        <!-- RIGHT PANEL -->
+        <div class="right-panel">
+            <div class="form-wrap">
+
+                <div class="breadcrumb">
+                    <a href="index.html">Home</a>
+                    <i class='bx bx-chevron-right'></i>
+                    <span>Log In</span>
+                </div>
+
+                <h2>Log In</h2>
+                <p class="sub">New to Rento? <a href="signup.html" style="color:var(--primary);font-weight:600;text-decoration:none;">Create a free account</a></p>
+
+                <!-- Social login -->
+                <div class="social-login">
+                    <a href="#" class="social-btn"><i class='bx bxl-google' style="color:#ea4335"></i> Google</a>
+                    <a href="#" class="social-btn"><i class='bx bxl-facebook-circle' style="color:#1877f2"></i> Facebook</a>
+                </div>
+
+                <div class="divider"><span>or continue with email</span></div>
+
+                <!-- LOGIN FORM -->
+                <form id="login-form">
+
+                    <div class="form-group" id="group-email">
+                        <label for="email">Email Address</label>
+                        <div class="input-wrap">
+                            <i class='bx bx-envelope icon'></i>
+                            <input type="email" id="email" name="email" placeholder="you@email.com" required />
+                        </div>
+                        <div class="field-error" id="email-error">Please enter a valid email.</div>
+                    </div>
+
+                    <div class="form-group" id="group-password">
+                        <label for="password">Password</label>
+                        <div class="input-wrap">
+                            <i class='bx bx-lock-alt icon'></i>
+                            <input type="password" id="password" name="password" placeholder="Enter your password" required />
+                            <button type="button" class="eye-btn" id="eyeBtn" onclick="togglePassword()">
+                                <i class='bx bx-hide' id="eyeIcon"></i>
+                            </button>
+                        </div>
+                        <div class="field-error" id="password-error">Please enter your password.</div>
+                    </div>
+
+                    <div class="form-row-meta">
+                        <label class="remember" style="text-transform:none;letter-spacing:0;font-size:13px;font-weight:400;color:var(--text-muted);margin:0;cursor:pointer;">
+                            <input type="checkbox" id="remember">
+                            <span>Remember me</span>
+                        </label>
+                        <a href="#" class="forgot-link">Forgot password?</a>
+                    </div>
+
+                    <button type="submit" class="btn-submit" id="loginBtn">
+                        <i class='bx bx-log-in'></i>
+                        Log In
+                    </button>
+                </form>
+
+                <p class="signup-link">Don't have an account? <a href="signup.html">Sign Up</a></p>
+                <p class="terms">By logging in you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- <script>
+        // Cursor
+        const cur = document.getElementById('cursor');
+        const fol = document.getElementById('cursorFollower');
+        let mx = 0, my = 0, fx = 0, fy = 0;
+        document.addEventListener('mousemove', e => {
+            mx = e.clientX; my = e.clientY;
+            cur.style.left = mx + 'px'; cur.style.top = my + 'px';
+        });
+        (function loop() {
+            fx += (mx - fx) * 0.12; fy += (my - fy) * 0.12;
+            fol.style.left = fx + 'px'; fol.style.top = fy + 'px';
+            requestAnimationFrame(loop);
+        })();
+        document.querySelectorAll('a, button, input, .social-btn').forEach(el => {
+            el.addEventListener('mouseenter', () => { cur.classList.add('hovered'); fol.classList.add('hovered'); });
+            el.addEventListener('mouseleave', () => { cur.classList.remove('hovered'); fol.classList.remove('hovered'); });
+        });
+
+        // Header scroll
+        window.addEventListener('scroll', () => {
+            document.getElementById('header').classList.toggle('scrolled', window.scrollY > 40);
+            document.getElementById('scrollTop').classList.toggle('show', window.scrollY > 200);
+        });
+        document.getElementById('scrollTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+        // Mobile menu
+        const menuIcons = document.getElementById('menuIcons');
+        const navbar = document.getElementById('navbar');
+        menuIcons.addEventListener('click', () => {
+            menuIcons.classList.toggle('active');
+            navbar.classList.toggle('open');
+        });
+        navbar.querySelectorAll('.nav-link').forEach(l => l.addEventListener('click', () => {
+            menuIcons.classList.remove('active');
+            navbar.classList.remove('open');
+        }));
+
+        // Toggle password visibility
+        function togglePassword() {
+            const input = document.getElementById('password');
+            const icon = document.getElementById('eyeIcon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'bx bx-show';
+            } else {
+                input.type = 'password';
+                icon.className = 'bx bx-hide';
+            }
+        }
+
+        // Clear errors on input
+        document.querySelectorAll('input').forEach(el => {
+            el.addEventListener('input', () => el.closest('.form-group')?.classList.remove('error'));
+        });
+
+        // Form submit
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+
+            let valid = true;
+            const emailGroup = document.getElementById('group-email');
+            const passGroup = document.getElementById('group-password');
+
+            if (!email || !email.includes('@')) {
+                emailGroup.classList.add('error');
+                valid = false;
+            } else {
+                emailGroup.classList.remove('error');
+            }
+            if (!password) {
+                passGroup.classList.add('error');
+                valid = false;
+            } else {
+                passGroup.classList.remove('error');
+            }
+            if (!valid) return;
+
+            const btn = document.getElementById('loginBtn');
+            btn.innerHTML = '<i class="bx bx-loader-alt" style="animation:spin 0.8s linear infinite"></i> Logging in…';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await res.json();
+
+                if (res.ok) {
+                    btn.innerHTML = '<i class="bx bx-check"></i> Success!';
+                    btn.style.background = '#16a34a';
+                    setTimeout(() => { window.location.href = 'payment.html'; }, 900);
+                } else {
+                    alert(data.error || 'Login failed. Please try again.');
+                    btn.innerHTML = '<i class="bx bx-log-in"></i> Log In';
+                    btn.disabled = false;
+                    btn.style.background = '';
+                }
+            } catch (error) {
+                alert('Error logging in. Please check your connection.');
+                btn.innerHTML = '<i class="bx bx-log-in"></i> Log In';
+                btn.disabled = false;
+                btn.style.background = '';
+            }
+        });
+
+        // Auto-scroll header trigger on load
+        document.getElementById('header').classList.add('scrolled');
+    </script> -->
+    <script src="frontend-connectors/auth.js"></script>
+    <script src="frontend-connectors/nav.js"></script>
+
 </body>
 </html>

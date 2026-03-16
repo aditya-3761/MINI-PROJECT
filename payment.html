@@ -1,268 +1,660 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Payment Page</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
-  <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
-  <style>
-    /* Base Reset */
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'Poppins', sans-serif;
-      margin: 0;
-      background: #fff;
-      color: #333;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      min-height: 100vh;
-      padding: 30px 20px;
-    }
-    .container {
-      max-width: 460px;
-      width: 100%;
-      background: #fff;
-      border: 2px solid #ff7f27;
-      border-radius: 14px;
-      padding: 40px 35px;
-      box-shadow: 0 6px 18px rgba(255, 127, 39, 0.25);
-    }
-    h2 {
-      color: #ff7f27;
-      font-weight: 600;
-      font-size: 2rem;
-      margin-bottom: 12px;
-      text-align: center;
-      letter-spacing: 1px;
-    }
-    p {
-      color: #555;
-      margin-bottom: 30px;
-      font-weight: 400;
-      text-align: center;
-      line-height: 1.5;
-    }
-    form {
-      text-align: left;
-    }
-    .input-box {
-      margin-bottom: 22px;
-    }
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 500;
-      color: #555;
-    }
-    input[type="text"],
-    input[type="month"] {
-      width: 100%;
-      padding: 14px 16px;
-      font-size: 1rem;
-      border-radius: 8px;
-      border: 1.8px solid #ddd;
-      background: #fff;
-      color: #333;
-      transition: border-color 0.3s, box-shadow 0.3s;
-      font-family: 'Poppins', sans-serif;
-    }
-    input[type="text"]:focus,
-    input[type="month"]:focus {
-      outline: none;
-      border-color: #ff7f27;
-      box-shadow: 0 0 6px rgba(255, 127, 39, 0.5);
-      background: #fff;
-    }
-    .btn {
-      width: 100%;
-      background: #ff7f27;
-      border: none;
-      padding: 16px 0;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 1.15rem;
-      color: #fff;
-      cursor: pointer;
-      transition: background 0.3s, transform 0.2s;
-      box-shadow: 0 6px 15px rgba(255, 127, 39, 0.4);
-      display: block;
-      margin-top: 10px;
-    }
-    .btn:hover {
-      background: #e5721b;
-      transform: translateY(-2px);
-      box-shadow: 0 9px 22px rgba(229, 114, 27, 0.7);
-    }
-    .confirmation-message {
-      margin-top: 20px;
-      font-weight: 600;
-      color: #2a7f27; /* Slightly darker green for success */
-      text-align: center;
-    }
-    #qr-scanner-container {
-      margin-top: 40px;
-      text-align: center;
-    }
-    #qr-scanner-container h3 {
-      color: #ff7f27;
-      font-weight: 600;
-      margin-bottom: 15px;
-    }
-    #qr-reader {
-      margin: 0 auto;
-      border: 2px solid #ff7f27;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(255, 127, 39, 0.25);
-      max-width: 300px;
-      width: 100%;
-    }
-    #qr-result {
-      display: none;
-      margin-top: 10px;
-      color: #2a7f27;
-      font-weight: 600;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Payment - Rento</title>
+    <link rel="icon" href="logo3.jpg" type="image/png">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet' />
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+    <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-    /* Responsive */
-    @media (max-width: 480px) {
-      .container {
-        padding: 30px 20px;
-      }
-      h2 {
-        font-size: 1.75rem;
-      }
-      #qr-reader {
-        max-width: 100%;
-      }
-    }
-  </style>
+        :root {
+            --primary: #ff6b00;
+            --primary-dark: #e05500;
+            --primary-bg: rgba(255,107,0,0.08);
+            --white: #ffffff;
+            --bg: #f7f5f2;
+            --bg2: #faf9f7;
+            --border: rgba(0,0,0,0.08);
+            --border-hover: rgba(255,107,0,0.35);
+            --text: #1a1a1a;
+            --text-muted: #666;
+            --text-dim: #aaa;
+            --font-display: 'Syne', sans-serif;
+            --font-body: 'DM Sans', sans-serif;
+            --ease: cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow-sm: 0 2px 12px rgba(0,0,0,0.06);
+            --shadow-md: 0 8px 32px rgba(0,0,0,0.10);
+            --shadow-lg: 0 24px 64px rgba(0,0,0,0.10);
+            --shadow-orange: 0 8px 32px rgba(255,107,0,0.28);
+        }
+
+        html { scroll-behavior: smooth; }
+        body { background: var(--bg); color: var(--text); font-family: var(--font-body); overflow-x: hidden; cursor: none; }
+
+        /* ===== CURSOR ===== */
+        .cursor { width: 10px; height: 10px; background: var(--primary); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: transform 0.15s var(--ease); }
+        .cursor-follower { width: 34px; height: 34px; border: 1.5px solid rgba(255,107,0,0.4); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: width 0.3s, height 0.3s; }
+        .cursor.hovered { transform: translate(-50%,-50%) scale(2.2); background: var(--primary-dark); }
+        .cursor-follower.hovered { width: 54px; height: 54px; border-color: var(--primary); opacity: 0.4; }
+
+        /* ===== HEADER ===== */
+        header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; transition: all 0.4s var(--ease); }
+        header.scrolled { background: rgba(255,255,255,0.94); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); box-shadow: 0 1px 0 rgba(0,0,0,0.08), var(--shadow-sm); }
+        .nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 48px; max-width: 1380px; margin: 0 auto; }
+        .logo { font-family: var(--font-display); font-size: 26px; font-weight: 800; color: var(--text); text-decoration: none; letter-spacing: -1px; }
+        .logo span { color: var(--primary); }
+        .navbar { display: flex; align-items: center; gap: 4px; }
+        .nav-link { color: var(--text-muted); text-decoration: none; font-size: 14px; font-weight: 500; padding: 8px 14px; border-radius: 8px; transition: all 0.25s var(--ease); position: relative; }
+        .nav-link::after { content: ''; position: absolute; bottom: 3px; left: 50%; transform: translateX(-50%) scaleX(0); width: 14px; height: 2px; background: var(--primary); border-radius: 99px; transition: transform 0.25s var(--ease); }
+        .nav-link:hover { color: var(--text); background: var(--primary-bg); }
+        .nav-link:hover::after { transform: translateX(-50%) scaleX(1); }
+        .nav-icons { display: flex; align-items: center; gap: 4px; }
+        .nav-icons a { width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); text-decoration: none; font-size: 18px; border-radius: 10px; transition: all 0.25s var(--ease); }
+        .nav-icons a:hover { color: var(--primary); background: var(--primary-bg); }
+        .menu-icons { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 8px; }
+        .menu-icons div { width: 22px; height: 1.5px; background: var(--text); border-radius: 99px; transition: all 0.3s var(--ease); }
+        .menu-icons.active .line1 { transform: translateY(6.5px) rotate(45deg); }
+        .menu-icons.active .line2 { opacity: 0; }
+        .menu-icons.active .line3 { transform: translateY(-6.5px) rotate(-45deg); }
+
+        /* ===== PAGE HERO ===== */
+        .page-hero { background: var(--white); padding: 132px 48px 56px; position: relative; overflow: hidden; }
+        .page-hero::before { content: ''; position: absolute; top: -120px; right: -100px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(255,107,0,0.07) 0%, transparent 65%); border-radius: 50%; pointer-events: none; }
+        .page-hero-inner { max-width: 1380px; margin: 0 auto; }
+        .breadcrumb { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+        .breadcrumb a { color: var(--text-muted); text-decoration: none; font-size: 13px; transition: color 0.2s; }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: var(--text-dim); font-size: 13px; }
+        .breadcrumb i { color: var(--text-dim); font-size: 12px; }
+        .page-hero h1 { font-family: var(--font-display); font-size: clamp(34px, 5vw, 54px); font-weight: 800; letter-spacing: -2px; color: var(--text); }
+        .page-hero h1 span { color: var(--primary); }
+        .page-hero p { color: var(--text-muted); font-size: 16px; margin-top: 10px; }
+
+        /* ===== MAIN SECTION ===== */
+        .payment-section { padding: 56px 48px 96px; max-width: 1380px; margin: 0 auto; }
+        .payment-grid { display: grid; grid-template-columns: 1fr 380px; gap: 40px; align-items: start; }
+
+        /* ===== PAYMENT TABS ===== */
+        .pay-tabs { display: flex; gap: 10px; margin-bottom: 32px; }
+        .pay-tab {
+            flex: 1; display: flex; align-items: center; justify-content: center; gap: 10px;
+            padding: 14px 20px; border-radius: 14px;
+            border: 1.5px solid var(--border); background: var(--white);
+            cursor: pointer; transition: all 0.3s var(--ease);
+            font-family: var(--font-body); font-size: 14px; font-weight: 600; color: var(--text-muted);
+        }
+        .pay-tab i { font-size: 20px; }
+        .pay-tab.active { background: var(--primary-bg); border-color: rgba(255,107,0,0.3); color: var(--primary); }
+        .pay-tab:hover { border-color: var(--border-hover); color: var(--text); }
+
+        /* ===== CARD FORM ===== */
+        .form-card {
+            background: var(--white); border: 1.5px solid var(--border);
+            border-radius: 24px; padding: 44px;
+            box-shadow: var(--shadow-lg); position: relative; overflow: hidden;
+            animation: slideUp 0.7s var(--ease) 0.1s both;
+        }
+        .form-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--primary), #ffb86c); }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.35s var(--ease); }
+
+        /* Visual card preview */
+        .card-preview {
+            background: linear-gradient(135deg, var(--primary) 0%, #ff9a3c 100%);
+            border-radius: 18px; padding: 28px 28px 24px;
+            margin-bottom: 32px; position: relative; overflow: hidden;
+            box-shadow: 0 16px 48px rgba(255,107,0,0.32);
+        }
+        .card-preview::before { content: ''; position: absolute; top: -60px; right: -60px; width: 200px; height: 200px; background: rgba(255,255,255,0.1); border-radius: 50%; }
+        .card-preview::after { content: ''; position: absolute; bottom: -40px; left: -40px; width: 160px; height: 160px; background: rgba(255,255,255,0.07); border-radius: 50%; }
+        .card-chip { width: 42px; height: 32px; background: rgba(255,255,255,0.35); border-radius: 6px; margin-bottom: 24px; position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; }
+        .card-chip::before { content: ''; width: 22px; height: 18px; border: 1.5px solid rgba(255,255,255,0.6); border-radius: 3px; }
+        .card-number-display { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: rgba(255,255,255,0.95); letter-spacing: 3px; margin-bottom: 20px; position: relative; z-index: 1; }
+        .card-bottom { display: flex; justify-content: space-between; align-items: flex-end; position: relative; z-index: 1; }
+        .card-label { font-size: 10px; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 3px; }
+        .card-value { font-size: 14px; font-weight: 600; color: #fff; }
+        .card-brand { font-family: var(--font-display); font-size: 22px; font-weight: 800; color: rgba(255,255,255,0.9); }
+
+        /* Form fields */
+        .form-group { margin-bottom: 20px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        label { display: block; font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 7px; }
+        .input-wrap { position: relative; }
+        .input-wrap .icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 18px; color: var(--text-dim); pointer-events: none; transition: color 0.2s; }
+        .input-wrap:focus-within .icon { color: var(--primary); }
+        input[type="text"], input[type="month"] {
+            width: 100%; padding: 13px 16px 13px 44px; font-size: 14px; border-radius: 12px;
+            border: 1.5px solid var(--border); background: var(--bg2); color: var(--text);
+            transition: all 0.3s var(--ease); font-family: var(--font-body); outline: none;
+        }
+        input:focus { border-color: var(--primary); background: var(--white); box-shadow: 0 0 0 3px rgba(255,107,0,0.1); }
+        input::placeholder { color: var(--text-dim); }
+        .field-error { font-size: 12px; color: #e53935; margin-top: 5px; display: none; }
+        .form-group.error input { border-color: #e53935; }
+        .form-group.error .field-error { display: block; }
+
+        /* Security badges */
+        .security-row { display: flex; align-items: center; gap: 16px; padding: 14px 18px; background: var(--bg); border-radius: 12px; margin-bottom: 20px; }
+        .security-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); }
+        .security-item i { font-size: 15px; color: #22c55e; }
+
+        .btn-pay {
+            width: 100%; background: var(--primary); border: none; padding: 16px; border-radius: 14px;
+            font-weight: 700; font-size: 15px; color: #fff; cursor: pointer;
+            transition: all 0.3s var(--ease); box-shadow: var(--shadow-orange);
+            font-family: var(--font-body); display: flex; align-items: center; justify-content: center; gap: 10px;
+            position: relative; overflow: hidden;
+        }
+        .btn-pay::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent); opacity: 0; transition: opacity 0.3s; }
+        .btn-pay:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 14px 40px rgba(255,107,0,0.4); }
+        .btn-pay:hover::before { opacity: 1; }
+        .btn-pay:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+
+        /* ===== QR SCANNER PANEL ===== */
+        .qr-panel { text-align: center; }
+        .qr-panel p { color: var(--text-muted); font-size: 14px; line-height: 1.7; margin-bottom: 28px; }
+        #qr-reader {
+            margin: 0 auto; border: 2px solid var(--border); border-radius: 16px;
+            overflow: hidden; max-width: 320px; width: 100%;
+            box-shadow: var(--shadow-md);
+        }
+        /* Override html5-qrcode default styles */
+        #qr-reader img { display: none !important; }
+        #qr-reader__scan_region { border-radius: 14px; }
+        #qr-reader__dashboard { padding: 12px !important; background: var(--bg) !important; border-top: 1px solid var(--border) !important; }
+        #qr-reader__dashboard_section_csr button { background: var(--primary) !important; color: #fff !important; border: none !important; border-radius: 8px !important; padding: 8px 18px !important; font-family: var(--font-body) !important; font-weight: 600 !important; cursor: pointer !important; }
+        #qr-result { display: none; margin-top: 18px; padding: 14px 18px; background: #edfbf3; border: 1px solid rgba(34,197,94,0.25); border-radius: 12px; color: #16a34a; font-size: 14px; font-weight: 600; }
+        #qr-result i { font-size: 18px; vertical-align: middle; margin-right: 6px; }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar { display: flex; flex-direction: column; gap: 20px; animation: slideLeft 0.7s var(--ease) 0.2s both; }
+
+        .order-card { background: var(--white); border: 1.5px solid var(--border); border-radius: 20px; padding: 28px; box-shadow: var(--shadow-md); }
+        .order-card h3 { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--text); letter-spacing: -0.3px; margin-bottom: 20px; }
+
+        .order-car { display: flex; align-items: center; gap: 14px; padding: 14px; background: var(--bg); border-radius: 12px; margin-bottom: 20px; }
+        .order-car img { width: 80px; height: 50px; object-fit: contain; }
+        .order-car-info .name { font-family: var(--font-display); font-size: 15px; font-weight: 700; color: var(--text); }
+        .order-car-info .type { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+        .order-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--border); }
+        .order-row:last-of-type { border-bottom: none; }
+        .order-row .key { font-size: 13px; color: var(--text-muted); }
+        .order-row .val { font-size: 13px; font-weight: 600; color: var(--text); }
+        .order-total { display: flex; justify-content: space-between; align-items: center; margin-top: 16px; padding-top: 16px; border-top: 2px solid var(--border); }
+        .order-total .key { font-size: 14px; font-weight: 700; color: var(--text); }
+        .order-total .val { font-family: var(--font-display); font-size: 24px; font-weight: 800; color: var(--primary); }
+
+        /* Trust card */
+        .trust-card { background: var(--primary-bg); border: 1.5px solid rgba(255,107,0,0.14); border-radius: 20px; padding: 22px; }
+        .trust-card h3 { font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 14px; }
+        .trust-item { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .trust-item:last-child { margin-bottom: 0; }
+        .trust-icon { width: 32px; height: 32px; background: var(--white); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 16px; flex-shrink: 0; }
+        .trust-text { font-size: 13px; color: var(--text-muted); }
+        .trust-text strong { display: block; font-size: 13px; font-weight: 600; color: var(--text); }
+
+        /* ===== SUCCESS OVERLAY ===== */
+        .success-overlay { display: none; position: fixed; inset: 0; z-index: 9000; background: rgba(247,245,242,0.97); backdrop-filter: blur(10px); align-items: center; justify-content: center; flex-direction: column; text-align: center; padding: 24px; }
+        .success-overlay.show { display: flex; animation: fadeIn 0.4s var(--ease); }
+        .success-ring { width: 100px; height: 100px; border-radius: 50%; background: var(--primary-bg); border: 3px solid rgba(255,107,0,0.2); display: flex; align-items: center; justify-content: center; margin: 0 auto 28px; position: relative; }
+        .success-ring::before { content: ''; position: absolute; inset: -8px; border-radius: 50%; border: 2px solid rgba(255,107,0,0.12); animation: ringPulse 1.5s ease-in-out infinite; }
+        @keyframes ringPulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.08);opacity:0.5} }
+        .success-ring i { font-size: 48px; color: var(--primary); animation: popIn 0.5s var(--ease) 0.2s both; }
+        @keyframes popIn { from{transform:scale(0)} to{transform:scale(1)} }
+        .success-overlay h2 { font-family: var(--font-display); font-size: 36px; font-weight: 800; letter-spacing: -1.5px; color: var(--text); margin-bottom: 10px; }
+        .success-overlay h2 span { color: var(--primary); }
+        .success-overlay .msg { color: var(--text-muted); font-size: 16px; margin-bottom: 12px; max-width: 420px; line-height: 1.7; }
+        .success-ref { display: inline-block; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 8px 20px; font-size: 14px; color: var(--text-muted); margin-bottom: 32px; }
+        .success-ref strong { color: var(--primary); font-family: var(--font-display); font-weight: 700; }
+        .success-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+        .btn-home { display: inline-flex; align-items: center; gap: 8px; background: var(--primary); color: #fff; padding: 13px 28px; border-radius: 12px; font-weight: 600; font-size: 14px; text-decoration: none; transition: all 0.3s var(--ease); }
+        .btn-home:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: var(--shadow-orange); }
+        .btn-outline-home { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--text); padding: 13px 28px; border-radius: 12px; font-weight: 500; font-size: 14px; text-decoration: none; border: 1.5px solid var(--border); transition: all 0.3s var(--ease); }
+        .btn-outline-home:hover { border-color: var(--primary); color: var(--primary); }
+
+        /* SCROLL TOP */
+        .scroll-top { position: fixed; bottom: 28px; right: 28px; width: 46px; height: 46px; background: var(--primary); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 20px; border: none; cursor: pointer; z-index: 100; box-shadow: var(--shadow-orange); transform: translateY(100px); transition: all 0.4s var(--ease); }
+        .scroll-top.show { transform: translateY(0); }
+        .scroll-top:hover { background: var(--primary-dark); transform: translateY(-3px); }
+
+        /* FOOTER MINI */
+        .footer-mini { background: var(--white); border-top: 1px solid var(--border); padding: 24px 48px; text-align: center; }
+        .footer-mini p { font-size: 13px; color: var(--text-dim); }
+        .footer-mini a { color: var(--primary); text-decoration: none; }
+
+        /* ANIMATIONS */
+        @keyframes slideUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:none} }
+        @keyframes slideLeft { from{opacity:0;transform:translateX(24px)} to{opacity:1;transform:none} }
+        @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            .navbar { position: fixed; top: 0; right: -100%; width: 270px; height: 100vh; background: var(--white); border-left: 1px solid var(--border); flex-direction: column; padding: 90px 28px 36px; gap: 2px; transition: right 0.4s var(--ease); z-index: 999; box-shadow: -8px 0 32px rgba(0,0,0,0.08); }
+            .navbar.open { right: 0; }
+            .menu-icons { display: flex; z-index: 1001; }
+            .nav-link { padding: 12px 14px; font-size: 15px; }
+            .nav { padding: 16px 24px; }
+            .payment-grid { grid-template-columns: 1fr; }
+            .sidebar { order: -1; }
+            .payment-section { padding: 40px 24px 72px; }
+            .page-hero { padding: 110px 24px 44px; }
+            .form-card { padding: 28px 20px; }
+            .form-row { grid-template-columns: 1fr; }
+            .pay-tabs { flex-direction: column; }
+            .footer-mini { padding: 20px 24px; }
+        }
+    </style>
 </head>
+
 <body>
-  <section class="payment-section container">
-    <h2>Complete Your Payment</h2>
-    <p>Please enter your payment details or scan a QR code to complete the payment.</p>
 
-    <!-- Payment Form -->
-    <form id="payment-form" class="payment-form" novalidate>
-      <div class="input-box">
-        <label for="card-name">Name on Card</label>
-        <input
-          type="text"
-          id="card-name"
-          name="name"
-          placeholder="Enter cardholder's name"
-          required
-        />
-      </div>
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-follower" id="cursorFollower"></div>
+    <button class="scroll-top" id="scrollTop"><i class='bx bx-up-arrow-alt'></i></button>
 
-      <div class="input-box">
-        <label for="card-number">Card Number</label>
-        <input
-          type="text"
-          id="card-number"
-          name="cardNumber"
-          placeholder="Enter card number"
-          required
-          pattern="\d{13,19}"
-          title="Enter a valid card number"
-        />
-      </div>
-
-      <div class="input-box">
-        <label for="expiration">Expiration Date</label>
-        <input type="month" id="expiration" name="expiration" required />
-      </div>
-
-      <div class="input-box">
-        <label for="cvv">CVV</label>
-        <input
-          type="text"
-          id="cvv"
-          name="cvv"
-          placeholder="Enter CVV"
-          required
-          pattern="\d{3,4}"
-          title="Enter a valid CVV"
-        />
-      </div>
-
-      <button type="submit" class="btn" id="pay-btn">Pay Now</button>
-    </form>
-
-    <!-- Confirmation Message -->
-    <div id="payment-confirmation-message" class="confirmation-message"></div>
-
-    <!-- QR Code Scanner Section -->
-    <div id="qr-scanner-container">
-      <h3>Or scan a QR code to pay</h3>
-      <div id="qr-reader"></div>
-      <div id="qr-result">
-        QR Code Scanned Successfully! Proceeding with Payment...
-      </div>
+    <!-- SUCCESS OVERLAY -->
+    <div class="success-overlay" id="successOverlay">
+        <div class="success-ring"><i class='bx bxs-badge-check'></i></div>
+        <h2>Payment <span>Successful!</span></h2>
+        <p class="msg">Your booking is confirmed and your car is reserved. A confirmation has been sent to your email.</p>
+        <div class="success-ref">Booking reference: <strong id="refCode">RNT-000001</strong></div>
+        <div class="success-actions">
+            <a href="index.html" class="btn-home"><i class='bx bx-home'></i> Back to Home</a>
+            <a href="bookings.html" class="btn-outline-home"><i class='bx bx-calendar'></i> My Bookings</a>
+        </div>
     </div>
-  </section>
 
-  <script>
-    // Handle form submission
-    document.getElementById('payment-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
+    <!-- HEADER -->
+    <header id="header">
+        <div class="nav">
+            <a href="index.html" class="logo">Rento<span>.</span></a>
+            <div class="navbar" id="navbar">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="index.html#trending" class="nav-link">Trending</a>
+                <a href="index.html#rentals" class="nav-link">Cars</a>
+                <a href="index.html#team" class="nav-link">Team</a>
+                <a href="index.html#reviews" class="nav-link">Reviews</a>
+                <a href="bookings.html" class="nav-link">Bookings</a>
+                <a href="customerpage.html" class="nav-link">Customer Support</a>
+            </div>
+            <div class="nav-icons">
+                <a href="#"><i class='bx bx-search'></i></a>
+                <a href="loginpage.html"><i class='bx bx-user user-icon'></i></a>
+                <div class="menu-icons" id="menuIcons">
+                    <div class="line1"></div>
+                    <div class="line2"></div>
+                    <div class="line3"></div>
+                </div>
+            </div>
+        </div>
+    </header>
 
-      const name = document.getElementById('card-name').value.trim();
-      const cardNumber = document.getElementById('card-number').value.trim();
-      const expiration = document.getElementById('expiration').value;
-      const cvv = document.getElementById('cvv').value.trim();
+    <!-- PAGE HERO -->
+    <div class="page-hero">
+        <div class="page-hero-inner">
+            <div class="breadcrumb">
+                <a href="index.html">Home</a>
+                <i class='bx bx-chevron-right'></i>
+                <a href="bookings.html">Bookings</a>
+                <i class='bx bx-chevron-right'></i>
+                <span>Payment</span>
+            </div>
+            <h1>Complete Your <span>Payment</span></h1>
+            <p>Secure checkout — your booking will be confirmed instantly after payment.</p>
+        </div>
+    </div>
 
-      if (!name || !cardNumber || !expiration || !cvv) {
-        alert('Please fill all payment fields.');
-        return;
-      }
+    <!-- MAIN -->
+    <div class="payment-section">
+        <div class="payment-grid">
 
-      try {
-        const response = await fetch('/api/payment', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, cardNumber, expiration, cvv }),
+            <!-- FORM CARD -->
+            <div class="form-card">
+
+                <!-- Payment method tabs -->
+                <div class="pay-tabs">
+                    <button class="pay-tab active" onclick="switchPayTab('card', this)" id="tabCard">
+                        <i class='bx bx-credit-card'></i> Credit / Debit Card
+                    </button>
+                    <button class="pay-tab" onclick="switchPayTab('qr', this)" id="tabQr">
+                        <i class='bx bx-qr-scan'></i> Scan QR Code
+                    </button>
+                </div>
+
+                <!-- CARD TAB -->
+                <div class="tab-content active" id="content-card">
+
+                    <!-- Visual card preview -->
+                    <div class="card-preview">
+                        <div class="card-chip"></div>
+                        <div class="card-number-display" id="previewNumber">•••• •••• •••• ••••</div>
+                        <div class="card-bottom">
+                            <div>
+                                <div class="card-label">Card Holder</div>
+                                <div class="card-value" id="previewName">YOUR NAME</div>
+                            </div>
+                            <div>
+                                <div class="card-label">Expires</div>
+                                <div class="card-value" id="previewExpiry">MM/YY</div>
+                            </div>
+                            <div class="card-brand" id="previewBrand">VISA</div>
+                        </div>
+                    </div>
+
+                    <!-- Card form -->
+                    <form id="payment-form" class="payment-form" novalidate>
+
+                        <div class="form-group" id="group-name">
+                            <label for="card-name">Name on Card</label>
+                            <div class="input-wrap">
+                                <i class='bx bx-user icon'></i>
+                                <input type="text" id="card-name" name="name" placeholder="Cardholder's full name" required />
+                            </div>
+                            <div class="field-error">Please enter the cardholder's name.</div>
+                        </div>
+
+                        <div class="form-group" id="group-number">
+                            <label for="card-number">Card Number</label>
+                            <div class="input-wrap">
+                                <i class='bx bx-credit-card icon'></i>
+                                <input type="text" id="card-number" name="cardNumber" placeholder="0000 0000 0000 0000" maxlength="19" required />
+                            </div>
+                            <div class="field-error">Please enter a valid card number.</div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group" id="group-expiry">
+                                <label for="expiration">Expiry Date</label>
+                                <div class="input-wrap">
+                                    <i class='bx bx-calendar icon'></i>
+                                    <input type="month" id="expiration" name="expiration" required />
+                                </div>
+                                <div class="field-error">Please select expiry date.</div>
+                            </div>
+                            <div class="form-group" id="group-cvv">
+                                <label for="cvv">CVV</label>
+                                <div class="input-wrap">
+                                    <i class='bx bx-lock-alt icon'></i>
+                                    <input type="text" id="cvv" name="cvv" placeholder="• • •" maxlength="4" required />
+                                </div>
+                                <div class="field-error">Enter 3 or 4 digit CVV.</div>
+                            </div>
+                        </div>
+
+                        <!-- Security badges -->
+                        <div class="security-row">
+                            <div class="security-item"><i class='bx bx-shield-quarter'></i> SSL Encrypted</div>
+                            <div class="security-item"><i class='bx bx-badge-check'></i> PCI Compliant</div>
+                            <div class="security-item"><i class='bx bx-lock'></i> Secure Checkout</div>
+                        </div>
+
+                        <button type="submit" class="btn-pay" id="payBtn">
+                            <i class='bx bx-lock-alt'></i>
+                            Pay Now
+                        </button>
+                    </form>
+                </div>
+
+                <!-- QR TAB -->
+                <div class="tab-content" id="content-qr">
+                    <div class="qr-panel">
+                        <p>Open your banking or payment app, tap <strong>Scan QR</strong>, and point your camera at the code below to complete your payment instantly.</p>
+                        <div id="qr-reader"></div>
+                        <div id="qr-result"><i class='bx bx-check-circle'></i> QR Code Scanned — Processing payment…</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- SIDEBAR -->
+            <div class="sidebar">
+
+                <!-- Order summary -->
+                <div class="order-card">
+                    <h3>Order Summary</h3>
+                    <div class="order-car">
+                        <img src="rental-4.png" alt="Car" id="orderCarImg">
+                        <div class="order-car-info">
+                            <div class="name" id="orderCarName">Nissan GT-R</div>
+                            <div class="type" id="orderCarType">Sports · Automatic</div>
+                        </div>
+                    </div>
+                    <div class="order-row"><span class="key">Pick-up</span><span class="val" id="orderPickup">—</span></div>
+                    <div class="order-row"><span class="key">Return</span><span class="val" id="orderReturn">—</span></div>
+                    <div class="order-row"><span class="key">Duration</span><span class="val" id="orderDays">—</span></div>
+                    <div class="order-row"><span class="key">Rate</span><span class="val" id="orderRate">—</span></div>
+                    <div class="order-row"><span class="key">Insurance</span><span class="val">Included</span></div>
+                    <div class="order-total">
+                        <span class="key">Total</span>
+                        <span class="val" id="orderTotal">—</span>
+                    </div>
+                </div>
+
+                <!-- Trust signals -->
+                <div class="trust-card">
+                    <h3>Safe & Secure Payment</h3>
+                    <div class="trust-item">
+                        <div class="trust-icon"><i class='bx bx-shield-quarter'></i></div>
+                        <div class="trust-text"><strong>256-bit SSL Encryption</strong>Your data is always protected</div>
+                    </div>
+                    <div class="trust-item">
+                        <div class="trust-icon"><i class='bx bx-undo'></i></div>
+                        <div class="trust-text"><strong>Free Cancellation</strong>Cancel up to 24hrs before pickup</div>
+                    </div>
+                    <div class="trust-item">
+                        <div class="trust-icon"><i class='bx bx-support'></i></div>
+                        <div class="trust-text"><strong>24/7 Support</strong>We're here if anything goes wrong</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER MINI -->
+    <div class="footer-mini">
+        <p>© 2024 Rento. All rights reserved. · <a href="customerpage.html">Support</a> · <a href="index.html">Home</a></p>
+    </div>
+
+    <!-- <script>
+        // ===== CURSOR =====
+        const cur = document.getElementById('cursor');
+        const fol = document.getElementById('cursorFollower');
+        let mx = 0, my = 0, fx = 0, fy = 0;
+        document.addEventListener('mousemove', e => {
+            mx = e.clientX; my = e.clientY;
+            cur.style.left = mx + 'px'; cur.style.top = my + 'px';
+        });
+        (function loop() {
+            fx += (mx - fx) * 0.12; fy += (my - fy) * 0.12;
+            fol.style.left = fx + 'px'; fol.style.top = fy + 'px';
+            requestAnimationFrame(loop);
+        })();
+        document.querySelectorAll('a, button, input, .pay-tab').forEach(el => {
+            el.addEventListener('mouseenter', () => { cur.classList.add('hovered'); fol.classList.add('hovered'); });
+            el.addEventListener('mouseleave', () => { cur.classList.remove('hovered'); fol.classList.remove('hovered'); });
         });
 
-        const data = await response.json();
-        if (response.ok) {
-          document.getElementById('payment-confirmation-message').textContent = data.message;
-          // Optionally clear the form
-          document.getElementById('payment-form').reset();
-        } else {
-          alert(data.error);
+        // ===== HEADER =====
+        window.addEventListener('scroll', () => {
+            document.getElementById('header').classList.toggle('scrolled', window.scrollY > 40);
+            document.getElementById('scrollTop').classList.toggle('show', window.scrollY > 200);
+        });
+        document.getElementById('header').classList.add('scrolled');
+        document.getElementById('scrollTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+        // ===== MOBILE MENU =====
+        const menuIcons = document.getElementById('menuIcons');
+        const navbar = document.getElementById('navbar');
+        menuIcons.addEventListener('click', () => {
+            menuIcons.classList.toggle('active');
+            navbar.classList.toggle('open');
+        });
+        navbar.querySelectorAll('.nav-link').forEach(l => l.addEventListener('click', () => {
+            menuIcons.classList.remove('active');
+            navbar.classList.remove('open');
+        }));
+
+        // ===== PAYMENT TABS =====
+        let qrScanner = null;
+        function switchPayTab(tab, btn) {
+            document.querySelectorAll('.pay-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('content-' + tab).classList.add('active');
+
+            if (tab === 'qr' && !qrScanner) {
+                qrScanner = new Html5QrcodeScanner('qr-reader', { fps: 10, qrbox: 250 }, false);
+                qrScanner.render(onScanSuccess, () => {});
+            }
         }
-      } catch (err) {
-        alert('Error processing payment. Please try again.');
-        console.error(err);
-      }
-    });
 
-    // QR Code Scanner setup
-    function onScanSuccess(decodedText, decodedResult) {
-      document.getElementById('qr-result').style.display = 'block';
-      console.log(`QR Code detected: ${decodedText}`);
+        // ===== QR SCANNER =====
+        function onScanSuccess(decodedText) {
+            document.getElementById('qr-result').style.display = 'block';
+            if (qrScanner) {
+                qrScanner.clear().catch(() => {});
+                qrScanner = null;
+            }
+            setTimeout(() => {
+                showSuccess();
+            }, 1800);
+        }
 
-      // Stop scanning after success
-      html5QrcodeScanner.clear().catch((error) => {
-        console.error('Failed to clear QR scanner.', error);
-      });
+        // ===== CARD PREVIEW LIVE UPDATE =====
+        document.getElementById('card-name').addEventListener('input', function() {
+            document.getElementById('previewName').textContent = this.value.toUpperCase() || 'YOUR NAME';
+        });
 
-      alert('QR code scanned successfully. Payment is being processed.');
+        document.getElementById('card-number').addEventListener('input', function() {
+            let val = this.value.replace(/\D/g, '').substring(0, 16);
+            let formatted = val.match(/.{1,4}/g)?.join(' ') || '';
+            this.value = formatted;
+            let display = formatted.padEnd(19, '•').replace(/[0-9]/g, (c, i) => i < formatted.length ? c : '•');
+            // Show last 4 digits, mask the rest
+            let parts = (val + '••••••••••••••••').substring(0, 16).match(/.{1,4}/g) || [];
+            let masked = parts.map((p, i) => i < parts.length - 1 ? '••••' : p).join(' ');
+            document.getElementById('previewNumber').textContent = masked || '•••• •••• •••• ••••';
+            // Detect brand
+            const brand = val.startsWith('4') ? 'VISA' : val.startsWith('5') ? 'MASTERCARD' : val.startsWith('3') ? 'AMEX' : 'CARD';
+            document.getElementById('previewBrand').textContent = brand;
+        });
 
-      // TODO: handle decodedText (payment info) here
-    }
+        document.getElementById('expiration').addEventListener('change', function() {
+            if (this.value) {
+                const [yr, mo] = this.value.split('-');
+                document.getElementById('previewExpiry').textContent = mo + '/' + yr.slice(2);
+            }
+        });
 
-    function onScanFailure(error) {
-      // Ignore or show UI feedback if needed
-    }
+        // ===== LOAD ORDER SUMMARY FROM SESSION/URL =====
+        // Try to read from sessionStorage (set by bookings page) or use defaults
+        function loadOrderSummary() {
+            try {
+                const booking = JSON.parse(sessionStorage.getItem('rentoBooking') || '{}');
+                if (booking.carModel) document.getElementById('orderCarName').textContent = booking.carModel;
+                if (booking.pickupDate) document.getElementById('orderPickup').textContent = formatDate(booking.pickupDate);
+                if (booking.returnDate) document.getElementById('orderReturn').textContent = formatDate(booking.returnDate);
+                if (booking.pickupDate && booking.returnDate) {
+                    const days = Math.ceil((new Date(booking.returnDate) - new Date(booking.pickupDate)) / 86400000);
+                    document.getElementById('orderDays').textContent = days + ' day' + (days > 1 ? 's' : '');
+                }
+                if (booking.rate) {
+                    document.getElementById('orderRate').textContent = '₹' + booking.rate + '/day';
+                    if (booking.pickupDate && booking.returnDate) {
+                        const days = Math.ceil((new Date(booking.returnDate) - new Date(booking.pickupDate)) / 86400000);
+                        document.getElementById('orderTotal').textContent = '₹' + (booking.rate * days).toLocaleString('en-IN');
+                        document.getElementById('payBtn').innerHTML = '<i class="bx bx-lock-alt"></i> Pay ₹' + (booking.rate * days).toLocaleString('en-IN');
+                    }
+                }
+            } catch(e) {}
+        }
+        loadOrderSummary();
 
-    let html5QrcodeScanner = new Html5QrcodeScanner('qr-reader', { fps: 10, qrbox: 250 }, false);
-    html5QrcodeScanner.render(onScanSuccess, onScanFailure);
-  </script>
+        function formatDate(d) {
+            if (!d) return '—';
+            return new Date(d).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+        }
+
+        // ===== VALIDATION =====
+        function setError(groupId, show) {
+            const g = document.getElementById(groupId);
+            if (g) g.classList.toggle('error', show);
+        }
+        document.querySelectorAll('input').forEach(el => {
+            el.addEventListener('input', () => el.closest('.form-group')?.classList.remove('error'));
+        });
+
+        // ===== FORM SUBMIT =====
+        document.getElementById('payment-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById('card-name').value.trim();
+            const cardNumber = document.getElementById('card-number').value.replace(/\s/g, '');
+            const expiration = document.getElementById('expiration').value;
+            const cvv = document.getElementById('cvv').value.trim();
+
+            let valid = true;
+            setError('group-name', !name); if (!name) valid = false;
+            setError('group-number', !cardNumber || cardNumber.length < 13); if (!cardNumber || cardNumber.length < 13) valid = false;
+            setError('group-expiry', !expiration); if (!expiration) valid = false;
+            setError('group-cvv', !cvv || cvv.length < 3); if (!cvv || cvv.length < 3) valid = false;
+            if (!valid) return;
+
+            const btn = document.getElementById('payBtn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="bx bx-loader-alt" style="animation:spin 0.8s linear infinite"></i> Processing…';
+            btn.disabled = true;
+
+            try {
+                const response = await fetch('/api/payment', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, cardNumber, expiration, cvv }),
+                });
+                const data = await response.json();
+
+                if (response.ok) {
+                    showSuccess(data.message);
+                    document.getElementById('payment-form').reset();
+                    document.getElementById('previewName').textContent = 'YOUR NAME';
+                    document.getElementById('previewNumber').textContent = '•••• •••• •••• ••••';
+                    document.getElementById('previewExpiry').textContent = 'MM/YY';
+                } else {
+                    alert(data.error || 'Payment failed. Please try again.');
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }
+            } catch (err) {
+                // For demo — show success if no backend
+                showSuccess();
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        });
+
+        // ===== SHOW SUCCESS OVERLAY =====
+        function showSuccess(msg) {
+            const ref = 'RNT-' + String(Math.floor(100000 + Math.random() * 900000));
+            document.getElementById('refCode').textContent = ref;
+            document.getElementById('successOverlay').classList.add('show');
+            sessionStorage.removeItem('rentoBooking');
+        }
+
+        const style = document.createElement('style');
+        style.textContent = '@keyframes spin { to { transform: rotate(360deg); } }';
+        document.head.appendChild(style);
+    </script> -->
+    <script src="frontend-connectors/payment.js"></script>
+    <script src="frontend-connectors/nav.js"></script>
+
 </body>
 </html>

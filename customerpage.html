@@ -1,154 +1,689 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Contact Support - Car Rental</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
-  <style>
-    /* Base styles */
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'Poppins', sans-serif;
-      margin: 0;
-      background: #fff; /* White background */
-      color: #333;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 20px;
-    }
-    .container {
-      width: 100%;
-      max-width: 450px;
-      background: #fff;
-      border: 1.5px solid #ff7f27;
-      border-radius: 12px;
-      padding: 40px 35px;
-      box-shadow: 0 6px 18px rgba(255, 127, 39, 0.25);
-      text-align: center;
-    }
-    h2 {
-      color: #ff7f27;
-      font-weight: 600;
-      font-size: 2rem;
-      margin-bottom: 28px;
-      letter-spacing: 1px;
-    }
-    form {
-      text-align: left;
-    }
-    .input-box {
-      margin-bottom: 22px;
-    }
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 500;
-      color: #555;
-    }
-    input[type="text"],
-    input[type="email"],
-    textarea {
-      width: 100%;
-      padding: 14px 16px;
-      font-size: 1rem;
-      border-radius: 8px;
-      border: 1.8px solid #ddd;
-      background: #fff;
-      color: #333;
-      transition: border-color 0.3s, box-shadow 0.3s;
-      font-family: 'Poppins', sans-serif;
-      resize: vertical;
-    }
-    input[type="text"]:focus,
-    input[type="email"]:focus,
-    textarea:focus {
-      outline: none;
-      border-color: #ff7f27;
-      box-shadow: 0 0 6px rgba(255, 127, 39, 0.5);
-      background: #fff;
-    }
-    .btn {
-      width: 100%;
-      background: #ff7f27;
-      border: none;
-      padding: 16px 0;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 1.15rem;
-      color: #fff;
-      cursor: pointer;
-      transition: background 0.3s, transform 0.2s;
-      box-shadow: 0 6px 15px rgba(255, 127, 39, 0.4);
-      display: block;
-      margin-top: 10px;
-    }
-    .btn:hover {
-      background: #e5721b;
-      transform: translateY(-2px);
-      box-shadow: 0 9px 22px rgba(229, 114, 27, 0.7);
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Customer Support - Rento</title>
+    <link rel="icon" href="logo3.jpg" type="image/png">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet' />
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-    /* Responsive */
-    @media (max-width: 480px) {
-      .container {
-        padding: 30px 20px;
-      }
-      h2 {
-        font-size: 1.75rem;
-      }
-    }
-  </style>
+        :root {
+            --primary: #ff6b00;
+            --primary-dark: #e05500;
+            --primary-bg: rgba(255,107,0,0.08);
+            --white: #ffffff;
+            --bg: #f7f5f2;
+            --bg2: #faf9f7;
+            --border: rgba(0,0,0,0.08);
+            --border-hover: rgba(255,107,0,0.3);
+            --text: #1a1a1a;
+            --text-muted: #666;
+            --text-dim: #aaa;
+            --font-display: 'Syne', sans-serif;
+            --font-body: 'DM Sans', sans-serif;
+            --ease: cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow-sm: 0 2px 12px rgba(0,0,0,0.06);
+            --shadow-md: 0 8px 32px rgba(0,0,0,0.10);
+            --shadow-lg: 0 24px 64px rgba(0,0,0,0.10);
+            --shadow-orange: 0 8px 32px rgba(255,107,0,0.25);
+        }
+
+        html { scroll-behavior: smooth; }
+        body { background: var(--bg); color: var(--text); font-family: var(--font-body); overflow-x: hidden; cursor: none; }
+
+        /* CURSOR */
+        .cursor { width: 10px; height: 10px; background: var(--primary); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: transform 0.15s var(--ease); }
+        .cursor-follower { width: 34px; height: 34px; border: 1.5px solid rgba(255,107,0,0.4); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: width 0.3s, height 0.3s; }
+        .cursor.hovered { transform: translate(-50%,-50%) scale(2.2); background: var(--primary-dark); }
+        .cursor-follower.hovered { width: 54px; height: 54px; border-color: var(--primary); opacity: 0.4; }
+
+        /* HEADER */
+        header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; transition: all 0.4s var(--ease); }
+        header.scrolled { background: rgba(255,255,255,0.94); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); box-shadow: 0 1px 0 rgba(0,0,0,0.08), var(--shadow-sm); }
+        .nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 48px; max-width: 1380px; margin: 0 auto; }
+        .logo { font-family: var(--font-display); font-size: 26px; font-weight: 800; color: var(--text); text-decoration: none; letter-spacing: -1px; }
+        .logo span { color: var(--primary); }
+        .navbar { display: flex; align-items: center; gap: 4px; }
+        .nav-link { color: var(--text-muted); text-decoration: none; font-size: 14px; font-weight: 500; padding: 8px 14px; border-radius: 8px; transition: all 0.25s var(--ease); position: relative; }
+        .nav-link::after { content: ''; position: absolute; bottom: 3px; left: 50%; transform: translateX(-50%) scaleX(0); width: 14px; height: 2px; background: var(--primary); border-radius: 99px; transition: transform 0.25s var(--ease); }
+        .nav-link:hover { color: var(--text); background: var(--primary-bg); }
+        .nav-link:hover::after, .nav-link.active::after { transform: translateX(-50%) scaleX(1); }
+        .nav-link.active { color: var(--primary); }
+        .nav-icons { display: flex; align-items: center; gap: 4px; }
+        .nav-icons a { width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); text-decoration: none; font-size: 18px; border-radius: 10px; transition: all 0.25s var(--ease); }
+        .nav-icons a:hover { color: var(--primary); background: var(--primary-bg); }
+        .menu-icons { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 8px; }
+        .menu-icons div { width: 22px; height: 1.5px; background: var(--text); border-radius: 99px; transition: all 0.3s var(--ease); }
+        .menu-icons.active .line1 { transform: translateY(6.5px) rotate(45deg); }
+        .menu-icons.active .line2 { opacity: 0; }
+        .menu-icons.active .line3 { transform: translateY(-6.5px) rotate(-45deg); }
+
+        /* PAGE HERO */
+        .page-hero { background: var(--white); padding: 140px 48px 72px; position: relative; overflow: hidden; text-align: center; }
+        .page-hero::before { content: ''; position: absolute; top: -120px; left: 50%; transform: translateX(-50%); width: 700px; height: 700px; background: radial-gradient(circle, rgba(255,107,0,0.07) 0%, transparent 65%); border-radius: 50%; pointer-events: none; }
+        .page-hero::after { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(0,0,0,0.05) 1px, transparent 1px); background-size: 28px 28px; pointer-events: none; mask-image: radial-gradient(ellipse at 50% 60%, black 20%, transparent 70%); -webkit-mask-image: radial-gradient(ellipse at 50% 60%, black 20%, transparent 70%); }
+        .page-hero-inner { position: relative; z-index: 1; max-width: 620px; margin: 0 auto; }
+        .breadcrumb { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 16px; }
+        .breadcrumb a { color: var(--text-muted); text-decoration: none; font-size: 13px; transition: color 0.2s; }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: var(--text-dim); font-size: 13px; }
+        .breadcrumb i { color: var(--text-dim); font-size: 12px; }
+        .hero-tag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--primary); margin-bottom: 12px; }
+        .page-hero h1 { font-family: var(--font-display); font-size: clamp(36px, 5vw, 58px); font-weight: 800; letter-spacing: -2px; color: var(--text); margin-bottom: 14px; }
+        .page-hero h1 span { color: var(--primary); }
+        .page-hero p { color: var(--text-muted); font-size: 16px; line-height: 1.7; margin-bottom: 36px; }
+
+        /* SEARCH BAR */
+        .hero-search { display: flex; align-items: center; max-width: 480px; margin: 0 auto; background: var(--white); border: 1.5px solid var(--border); border-radius: 14px; padding: 6px 6px 6px 18px; box-shadow: var(--shadow-md); transition: border-color 0.3s, box-shadow 0.3s; }
+        .hero-search:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(255,107,0,0.1), var(--shadow-md); }
+        .hero-search i { color: var(--text-dim); font-size: 18px; margin-right: 10px; flex-shrink: 0; }
+        .hero-search input { flex: 1; border: none; outline: none; background: none; font-size: 14px; color: var(--text); font-family: var(--font-body); }
+        .hero-search input::placeholder { color: var(--text-dim); }
+        .hero-search button { background: var(--primary); color: #fff; border: none; padding: 10px 20px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: var(--font-body); transition: all 0.3s var(--ease); }
+        .hero-search button:hover { background: var(--primary-dark); }
+
+        /* CONTACT CARDS */
+        .contact-section { padding: 72px 48px 0; max-width: 1380px; margin: 0 auto; }
+        .section-heading { text-align: center; margin-bottom: 40px; }
+        .section-tag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--primary); margin-bottom: 10px; }
+        .section-heading h2 { font-family: var(--font-display); font-size: clamp(28px, 3.5vw, 42px); font-weight: 800; letter-spacing: -1.5px; color: var(--text); }
+        .section-heading h2 span { color: var(--primary); }
+
+        .contact-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+        .contact-card { background: var(--white); border: 1.5px solid var(--border); border-radius: 20px; padding: 28px 22px; text-align: center; transition: all 0.4s var(--ease); position: relative; overflow: hidden; cursor: pointer; text-decoration: none; display: block; }
+        .contact-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: var(--primary); transform: scaleX(0); transition: transform 0.4s var(--ease); }
+        .contact-card:hover { border-color: var(--border-hover); transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+        .contact-card:hover::after { transform: scaleX(1); }
+        .card-icon { width: 56px; height: 56px; background: var(--primary-bg); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; transition: all 0.3s var(--ease); }
+        .contact-card:hover .card-icon { background: var(--primary); }
+        .card-icon i { font-size: 26px; color: var(--primary); transition: color 0.3s; }
+        .contact-card:hover .card-icon i { color: #fff; }
+        .contact-card h3 { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 6px; letter-spacing: -0.3px; }
+        .contact-card p { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 14px; }
+        .card-link { font-size: 13px; font-weight: 600; color: var(--primary); display: inline-flex; align-items: center; gap: 5px; }
+        .card-link i { font-size: 14px; transition: transform 0.25s var(--ease); }
+        .contact-card:hover .card-link i { transform: translateX(4px); }
+
+        /* MAIN SECTION */
+        .main-section { padding: 64px 48px 96px; max-width: 1380px; margin: 0 auto; }
+        .main-grid { display: grid; grid-template-columns: 1fr 400px; gap: 40px; align-items: start; }
+
+        /* FORM CARD */
+        .form-card { background: var(--white); border: 1.5px solid var(--border); border-radius: 24px; padding: 48px 44px; box-shadow: var(--shadow-lg); position: relative; overflow: hidden; animation: slideUp 0.7s var(--ease) 0.1s both; }
+        .form-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--primary), #ffb86c); }
+        .form-card h2 { font-family: var(--font-display); font-size: 24px; font-weight: 800; color: var(--text); letter-spacing: -0.8px; margin-bottom: 6px; }
+        .form-card .sub { color: var(--text-muted); font-size: 14px; margin-bottom: 36px; }
+
+        /* TABS */
+        .form-tabs { display: flex; gap: 8px; margin-bottom: 32px; background: var(--bg); padding: 5px; border-radius: 12px; }
+        .tab-btn { flex: 1; padding: 10px 16px; border: none; background: none; border-radius: 9px; font-size: 13px; font-weight: 600; color: var(--text-muted); cursor: pointer; font-family: var(--font-body); transition: all 0.3s var(--ease); }
+        .tab-btn.active { background: var(--white); color: var(--primary); box-shadow: var(--shadow-sm); }
+        .tab-pane { display: none; }
+        .tab-pane.active { display: block; animation: fadeIn 0.3s var(--ease); }
+
+        /* FORM */
+        .form-group { margin-bottom: 20px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        label { display: block; font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 7px; }
+        .input-wrap { position: relative; }
+        .input-wrap i.icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 18px; color: var(--text-dim); pointer-events: none; }
+        .input-wrap.textarea-wrap i.icon { top: 16px; transform: none; }
+        input[type="text"], input[type="email"], input[type="tel"], select, textarea {
+            width: 100%; padding: 13px 16px 13px 44px; font-size: 14px; border-radius: 12px;
+            border: 1.5px solid var(--border); background: var(--bg2); color: var(--text);
+            transition: all 0.3s var(--ease); font-family: var(--font-body); outline: none;
+        }
+        textarea { resize: vertical; min-height: 130px; padding-top: 14px; }
+        select { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23aaa' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+        input:focus, textarea:focus, select:focus { border-color: var(--primary); background: var(--white); box-shadow: 0 0 0 3px rgba(255,107,0,0.1); }
+        .input-wrap:focus-within i.icon { color: var(--primary); }
+        input::placeholder, textarea::placeholder { color: var(--text-dim); }
+
+        .field-error { font-size: 12px; color: #e53935; margin-top: 5px; display: none; }
+        .form-group.error input, .form-group.error textarea, .form-group.error select { border-color: #e53935; }
+        .form-group.error .field-error { display: block; }
+
+        /* Priority badges */
+        .priority-group { display: flex; gap: 10px; flex-wrap: wrap; }
+        .priority-badge { padding: 8px 16px; border-radius: 99px; font-size: 12px; font-weight: 600; border: 1.5px solid var(--border); color: var(--text-muted); cursor: pointer; transition: all 0.25s var(--ease); background: var(--bg2); }
+        .priority-badge.active { background: var(--primary-bg); border-color: rgba(255,107,0,0.35); color: var(--primary); }
+        .priority-badge:hover { border-color: var(--border-hover); color: var(--primary); }
+
+        .btn-submit { width: 100%; background: var(--primary); border: none; padding: 16px; border-radius: 14px; font-weight: 700; font-size: 15px; color: #fff; cursor: pointer; transition: all 0.3s var(--ease); box-shadow: var(--shadow-orange); font-family: var(--font-body); display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 8px; position: relative; overflow: hidden; }
+        .btn-submit:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 14px 40px rgba(255,107,0,0.4); }
+        .btn-submit:active { transform: translateY(0); }
+
+        /* SIDEBAR */
+        .sidebar { display: flex; flex-direction: column; gap: 20px; animation: slideLeft 0.7s var(--ease) 0.2s both; }
+
+        .info-card { background: var(--white); border: 1.5px solid var(--border); border-radius: 20px; padding: 28px; box-shadow: var(--shadow-sm); }
+        .info-card h3 { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--text); letter-spacing: -0.3px; margin-bottom: 20px; }
+
+        .hours-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--border); }
+        .hours-row:last-child { border-bottom: none; }
+        .hours-row .day { font-size: 13px; color: var(--text-muted); }
+        .hours-row .time { font-size: 13px; font-weight: 600; color: var(--text); }
+        .hours-row .time.closed { color: #e53935; }
+        .hours-row.today .day { color: var(--primary); font-weight: 600; }
+        .hours-row.today .time { color: var(--primary); }
+
+        .status-badge { display: inline-flex; align-items: center; gap: 6px; background: #edfbf3; border: 1px solid rgba(34,197,94,0.25); color: #16a34a; font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 99px; margin-bottom: 16px; }
+        .status-badge .dot { width: 7px; height: 7px; background: #22c55e; border-radius: 50%; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+        .quick-links h3 { font-family: var(--font-display); font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 14px; letter-spacing: -0.3px; }
+        .quick-link-item { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; text-decoration: none; color: var(--text-muted); font-size: 13px; transition: all 0.25s var(--ease); margin-bottom: 4px; }
+        .quick-link-item:hover { background: var(--primary-bg); color: var(--primary); }
+        .quick-link-item i { font-size: 18px; color: var(--text-dim); transition: color 0.25s; }
+        .quick-link-item:hover i { color: var(--primary); }
+
+        /* FAQ SECTION */
+        .faq-section { padding: 0 48px 96px; max-width: 1380px; margin: 0 auto; }
+        .faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 40px; }
+        .faq-item { background: var(--white); border: 1.5px solid var(--border); border-radius: 16px; overflow: hidden; transition: border-color 0.3s var(--ease); }
+        .faq-item.open { border-color: var(--border-hover); }
+        .faq-question { display: flex; justify-content: space-between; align-items: center; padding: 20px 22px; cursor: pointer; gap: 12px; }
+        .faq-question h4 { font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.5; }
+        .faq-icon { width: 28px; height: 28px; background: var(--bg); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.3s var(--ease); }
+        .faq-icon i { font-size: 16px; color: var(--text-muted); transition: transform 0.3s var(--ease), color 0.3s; }
+        .faq-item.open .faq-icon { background: var(--primary-bg); }
+        .faq-item.open .faq-icon i { transform: rotate(45deg); color: var(--primary); }
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s var(--ease), padding 0.3s; padding: 0 22px; }
+        .faq-item.open .faq-answer { max-height: 200px; padding: 0 22px 20px; }
+        .faq-answer p { font-size: 14px; color: var(--text-muted); line-height: 1.75; }
+
+        /* SUCCESS */
+        .success-overlay { display: none; position: fixed; inset: 0; z-index: 9000; background: rgba(247,245,242,0.95); backdrop-filter: blur(8px); align-items: center; justify-content: center; flex-direction: column; text-align: center; padding: 24px; }
+        .success-overlay.show { display: flex; animation: fadeIn 0.4s var(--ease); }
+        .success-icon { width: 80px; height: 80px; background: var(--primary-bg); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; }
+        .success-icon i { font-size: 40px; color: var(--primary); animation: popIn 0.5s var(--ease) 0.2s both; }
+        @keyframes popIn { from{transform:scale(0)} to{transform:scale(1)} }
+        .success-overlay h2 { font-family: var(--font-display); font-size: 32px; font-weight: 800; letter-spacing: -1px; color: var(--text); margin-bottom: 10px; }
+        .success-overlay p { color: var(--text-muted); font-size: 16px; margin-bottom: 32px; max-width: 400px; }
+        .btn-back { display: inline-flex; align-items: center; gap: 8px; background: var(--primary); color: #fff; padding: 13px 28px; border-radius: 12px; font-weight: 600; font-size: 14px; text-decoration: none; transition: all 0.3s var(--ease); }
+        .btn-back:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: var(--shadow-orange); }
+
+        /* FOOTER MINI */
+        .footer-mini { background: var(--white); border-top: 1px solid var(--border); padding: 24px 48px; text-align: center; }
+        .footer-mini p { font-size: 13px; color: var(--text-dim); }
+        .footer-mini a { color: var(--primary); text-decoration: none; }
+
+        /* SCROLL TOP */
+        .scroll-top { position: fixed; bottom: 28px; right: 28px; width: 46px; height: 46px; background: var(--primary); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 20px; border: none; cursor: pointer; z-index: 100; box-shadow: var(--shadow-orange); transform: translateY(100px); transition: all 0.4s var(--ease); }
+        .scroll-top.show { transform: translateY(0); }
+        .scroll-top:hover { background: var(--primary-dark); transform: translateY(-3px); }
+
+        /* ANIMATIONS */
+        @keyframes slideUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:none} }
+        @keyframes slideLeft { from{opacity:0;transform:translateX(24px)} to{opacity:1;transform:none} }
+        @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+        .reveal { opacity: 0; transform: translateY(28px); transition: all 0.7s var(--ease); }
+        .reveal.visible { opacity: 1; transform: none; }
+        .stagger > * { opacity: 0; transform: translateY(24px); transition: opacity 0.6s var(--ease), transform 0.6s var(--ease); }
+        .stagger.visible > *:nth-child(1) { opacity:1;transform:none;transition-delay:0s }
+        .stagger.visible > *:nth-child(2) { opacity:1;transform:none;transition-delay:.08s }
+        .stagger.visible > *:nth-child(3) { opacity:1;transform:none;transition-delay:.16s }
+        .stagger.visible > *:nth-child(4) { opacity:1;transform:none;transition-delay:.24s }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) { .contact-cards { grid-template-columns: repeat(2,1fr); } }
+        @media (max-width: 900px) {
+            .navbar { position: fixed; top: 0; right: -100%; width: 270px; height: 100vh; background: var(--white); border-left: 1px solid var(--border); flex-direction: column; padding: 90px 28px 36px; gap: 2px; transition: right 0.4s var(--ease); z-index: 999; box-shadow: -8px 0 32px rgba(0,0,0,0.08); }
+            .navbar.open { right: 0; }
+            .menu-icons { display: flex; z-index: 1001; }
+            .nav-link { padding: 12px 14px; font-size: 15px; }
+            .main-grid { grid-template-columns: 1fr; }
+            .faq-grid { grid-template-columns: 1fr; }
+            .nav { padding: 16px 24px; }
+            .contact-section, .main-section, .faq-section { padding-left: 24px; padding-right: 24px; }
+            .page-hero { padding: 110px 24px 56px; }
+            .form-card { padding: 32px 24px; }
+            .form-row { grid-template-columns: 1fr; }
+            .footer-mini { padding: 20px 24px; }
+        }
+        @media (max-width: 600px) { .contact-cards { grid-template-columns: 1fr; } }
+    </style>
 </head>
+
 <body>
-  <section class="container">
-    <h2>Contact Support</h2>
-    <form id="support-form" novalidate>
-      <div class="input-box">
-        <label for="name">Full Name</label>
-        <input type="text" id="name" name="name" placeholder="Your full name" required />
-      </div>
-      <div class="input-box">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" placeholder="Your email" required />
-      </div>
-      <div class="input-box">
-        <label for="message">Message</label>
-        <textarea id="message" name="message" rows="5" placeholder="Your message" required></textarea>
-      </div>
-      <button type="submit" class="btn">Send Message</button>
-    </form>
-  </section>
 
-  <script>
-    document.getElementById('support-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-follower" id="cursorFollower"></div>
+    <button class="scroll-top" id="scrollTop"><i class='bx bx-up-arrow-alt'></i></button>
 
-      const name = document.getElementById('name').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const message = document.getElementById('message').value.trim();
+    <!-- SUCCESS OVERLAY -->
+    <div class="success-overlay" id="successOverlay">
+        <div class="success-icon"><i class='bx bx-check-circle'></i></div>
+        <h2>Message <span style="color:var(--primary)">Sent!</span></h2>
+        <p>Our support team has received your message and will get back to you within 24 hours.</p>
+        <a href="index.html" class="btn-back"><i class='bx bx-home'></i> Back to Home</a>
+    </div>
 
-      try {
-        const res = await fetch('/api/support', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, email, message }),
+    <!-- HEADER -->
+    <header id="header">
+        <div class="nav">
+            <a href="index.html" class="logo">Rento<span>.</span></a>
+            <div class="navbar" id="navbar">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="index.html#trending" class="nav-link">Trending</a>
+                <a href="index.html#rentals" class="nav-link">Cars</a>
+                <a href="index.html#team" class="nav-link">Team</a>
+                <a href="index.html#reviews" class="nav-link">Reviews</a>
+                <a href="bookings.html" class="nav-link">Bookings</a>
+                <a href="customerpage.html" class="nav-link active">Customer Support</a>
+            </div>
+            <div class="nav-icons">
+                <a href="#"><i class='bx bx-search'></i></a>
+                <a href="loginpage.html"><i class='bx bx-user user-icon'></i></a>
+                <div class="menu-icons" id="menuIcons">
+                    <div class="line1"></div>
+                    <div class="line2"></div>
+                    <div class="line3"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- PAGE HERO -->
+    <div class="page-hero">
+        <div class="page-hero-inner">
+            <div class="breadcrumb">
+                <a href="index.html">Home</a>
+                <i class='bx bx-chevron-right'></i>
+                <span>Customer Support</span>
+            </div>
+            <div class="hero-tag">We're here to help</div>
+            <h1>How Can We <span>Help You?</span></h1>
+            <p>Search our help centre or get in touch with our support team — we're available 6 days a week.</p>
+            <div class="hero-search">
+                <i class='bx bx-search'></i>
+                <input type="text" id="faqSearch" placeholder="Search e.g. cancel booking, insurance…">
+                <button onclick="scrollToFaq()">Search</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTACT CARDS -->
+    <div class="contact-section">
+        <div class="section-heading reveal">
+            <div class="section-tag">Reach Out</div>
+            <h2>Get in <span>Touch</span></h2>
+        </div>
+        <div class="contact-cards stagger">
+            <a href="tel:+8812345796" class="contact-card">
+                <div class="card-icon"><i class='bx bx-phone'></i></div>
+                <h3>Call Us</h3>
+                <p>Speak directly with our team for urgent issues.</p>
+                <div class="card-link">+88 1234 5796 <i class='bx bx-right-arrow-alt'></i></div>
+            </a>
+            <a href="mailto:support@domain.com" class="contact-card">
+                <div class="card-icon"><i class='bx bx-envelope'></i></div>
+                <h3>Email Support</h3>
+                <p>Send us an email, we reply within 24 hours.</p>
+                <div class="card-link">support@domain.com <i class='bx bx-right-arrow-alt'></i></div>
+            </a>
+            <a href="#" class="contact-card">
+                <div class="card-icon"><i class='bx bx-chat'></i></div>
+                <h3>Live Chat</h3>
+                <p>Chat with a support agent instantly online.</p>
+                <div class="card-link">Start a chat <i class='bx bx-right-arrow-alt'></i></div>
+            </a>
+            <a href="index.html#home" class="contact-card">
+                <div class="card-icon"><i class='bx bx-map-pin'></i></div>
+                <h3>Visit Us</h3>
+                <p>Find us at 925 Bald Hill St, Ashivelle, NC.</p>
+                <div class="card-link">Get directions <i class='bx bx-right-arrow-alt'></i></div>
+            </a>
+        </div>
+    </div>
+
+    <!-- MAIN: FORM + SIDEBAR -->
+    <div class="main-section">
+        <div class="main-grid">
+
+            <!-- FORM CARD -->
+            <div class="form-card">
+                <h2>Contact Support</h2>
+                <p class="sub">Fill in the form and our team will get back to you shortly.</p>
+
+                <!-- TABS -->
+                <div class="form-tabs">
+                    <button class="tab-btn active" onclick="switchTab('general', this)">General Query</button>
+                    <button class="tab-btn" onclick="switchTab('booking', this)">Booking Issue</button>
+                    <button class="tab-btn" onclick="switchTab('feedback', this)">Feedback</button>
+                </div>
+
+                <form id="support-form" novalidate>
+                    <input type="hidden" id="form-type" value="general">
+
+                    <!-- GENERAL TAB -->
+                    <div class="tab-pane active" id="tab-general">
+                        <div class="form-row">
+                            <div class="form-group" id="group-name">
+                                <label for="name">Full Name</label>
+                                <div class="input-wrap"><i class='bx bx-user icon'></i>
+                                    <input type="text" id="name" name="name" placeholder="Your full name" required />
+                                </div>
+                                <div class="field-error">Please enter your name.</div>
+                            </div>
+                            <div class="form-group" id="group-email">
+                                <label for="email">Email</label>
+                                <div class="input-wrap"><i class='bx bx-envelope icon'></i>
+                                    <input type="email" id="email" name="email" placeholder="you@email.com" required />
+                                </div>
+                                <div class="field-error">Enter a valid email.</div>
+                            </div>
+                        </div>
+                        <div class="form-group" id="group-subject">
+                            <label for="subject">Subject</label>
+                            <div class="input-wrap"><i class='bx bx-purchase-tag icon'></i>
+                                <input type="text" id="subject" name="subject" placeholder="What's this about?" required />
+                            </div>
+                            <div class="field-error">Please enter a subject.</div>
+                        </div>
+                    </div>
+
+                    <!-- BOOKING TAB -->
+                    <div class="tab-pane" id="tab-booking">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="booking-id">Booking ID</label>
+                                <div class="input-wrap"><i class='bx bx-receipt icon'></i>
+                                    <input type="text" id="booking-id" name="bookingId" placeholder="e.g. RNT-20240001" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="issue-type">Issue Type</label>
+                                <div class="input-wrap"><i class='bx bx-error-circle icon'></i>
+                                    <select id="issue-type" name="issueType">
+                                        <option value="">Select issue type</option>
+                                        <option>Cancellation Request</option>
+                                        <option>Date Change</option>
+                                        <option>Billing Problem</option>
+                                        <option>Car Condition</option>
+                                        <option>Refund Request</option>
+                                        <option>Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FEEDBACK TAB -->
+                    <div class="tab-pane" id="tab-feedback">
+                        <div class="form-group">
+                            <label>Priority</label>
+                            <div class="priority-group">
+                                <span class="priority-badge active" data-val="low">Low</span>
+                                <span class="priority-badge" data-val="medium">Medium</span>
+                                <span class="priority-badge" data-val="high">High</span>
+                            </div>
+                            <input type="hidden" id="priority" value="low">
+                        </div>
+                    </div>
+
+                    <!-- SHARED FIELDS -->
+                    <div class="form-group" id="group-message">
+                        <label for="message">Message</label>
+                        <div class="input-wrap textarea-wrap"><i class='bx bx-message-detail icon'></i>
+                            <textarea id="message" name="message" rows="5" placeholder="Describe your issue or question in detail…" required></textarea>
+                        </div>
+                        <div class="field-error">Please enter a message.</div>
+                    </div>
+
+                    <button type="submit" class="btn-submit">
+                        <i class='bx bx-send'></i>
+                        Send Message
+                    </button>
+                </form>
+            </div>
+
+            <!-- SIDEBAR -->
+            <div class="sidebar">
+
+                <!-- Status -->
+                <div class="info-card">
+                    <div class="status-badge"><span class="dot"></span> Support Online</div>
+                    <h3>Opening Hours</h3>
+                    <div class="hours-row today"><span class="day">Monday</span><span class="time">9:00 – 20:30</span></div>
+                    <div class="hours-row"><span class="day">Tuesday</span><span class="time">9:00 – 20:30</span></div>
+                    <div class="hours-row"><span class="day">Wednesday</span><span class="time">9:00 – 20:30</span></div>
+                    <div class="hours-row"><span class="day">Thursday</span><span class="time">9:00 – 20:30</span></div>
+                    <div class="hours-row"><span class="day">Friday</span><span class="time">9:00 – 20:30</span></div>
+                    <div class="hours-row"><span class="day">Saturday</span><span class="time">9:00 – 20:30</span></div>
+                    <div class="hours-row"><span class="day">Sunday</span><span class="time closed">Closed</span></div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="info-card quick-links">
+                    <h3>Quick Links</h3>
+                    <a href="bookings.html" class="quick-link-item"><i class='bx bx-calendar'></i> Make a Booking</a>
+                    <a href="bookings.html" class="quick-link-item"><i class='bx bx-edit'></i> Modify Booking</a>
+                    <a href="bookings.html" class="quick-link-item"><i class='bx bx-x-circle'></i> Cancel Booking</a>
+                    <a href="index.html#rentals" class="quick-link-item"><i class='bx bx-car'></i> Browse Cars</a>
+                    <a href="loginpage.html" class="quick-link-item"><i class='bx bx-user'></i> My Account</a>
+                </div>
+
+                <!-- Response time -->
+                <div class="info-card" style="background: var(--primary-bg); border-color: rgba(255,107,0,0.15);">
+                    <h3>Avg. Response Times</h3>
+                    <div class="hours-row"><span class="day">Phone</span><span class="time">Under 2 min</span></div>
+                    <div class="hours-row"><span class="day">Live Chat</span><span class="time">Under 5 min</span></div>
+                    <div class="hours-row"><span class="day">Email</span><span class="time">Within 24 hrs</span></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- FAQ SECTION -->
+    <div class="faq-section" id="faq-section">
+        <div class="section-heading reveal">
+            <div class="section-tag">FAQ</div>
+            <h2>Frequently Asked <span>Questions</span></h2>
+        </div>
+        <div class="faq-grid stagger">
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <h4>How do I cancel or modify my booking?</h4>
+                    <div class="faq-icon"><i class='bx bx-plus'></i></div>
+                </div>
+                <div class="faq-answer"><p>You can cancel or modify your booking up to 24 hours before the pickup time through the Bookings page or by contacting our support team. Cancellations made within 24 hours may be subject to a fee.</p></div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <h4>What documents do I need to rent a car?</h4>
+                    <div class="faq-icon"><i class='bx bx-plus'></i></div>
+                </div>
+                <div class="faq-answer"><p>You'll need a valid driver's licence, a government-issued ID or passport, and a credit or debit card in your name. International customers may require an International Driving Permit.</p></div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <h4>Is insurance included in the rental price?</h4>
+                    <div class="faq-icon"><i class='bx bx-plus'></i></div>
+                </div>
+                <div class="faq-answer"><p>Yes, all our rentals include basic insurance coverage for the entire rental period. You can also opt for premium coverage during checkout for additional peace of mind.</p></div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <h4>Can I extend my rental period?</h4>
+                    <div class="faq-icon"><i class='bx bx-plus'></i></div>
+                </div>
+                <div class="faq-answer"><p>Yes, you can extend your rental period subject to car availability. Contact us at least 6 hours before the return time and we'll do our best to accommodate your request.</p></div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <h4>What happens if I return the car late?</h4>
+                    <div class="faq-icon"><i class='bx bx-plus'></i></div>
+                </div>
+                <div class="faq-answer"><p>Late returns are charged at the standard daily rate pro-rated per hour. If you know you'll be late, please call us in advance so we can adjust the booking accordingly.</p></div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <h4>How does the refund process work?</h4>
+                    <div class="faq-icon"><i class='bx bx-plus'></i></div>
+                </div>
+                <div class="faq-answer"><p>Refunds for eligible cancellations are processed within 5–7 business days back to your original payment method. You'll receive a confirmation email once the refund has been initiated.</p></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER MINI -->
+    <div class="footer-mini">
+        <p>© 2024 Rento. All rights reserved. · <a href="bookings.html">Bookings</a> · <a href="index.html">Home</a></p>
+    </div>
+
+    <script>
+        // Cursor
+        const cur = document.getElementById('cursor');
+        const fol = document.getElementById('cursorFollower');
+        let mx = 0, my = 0, fx = 0, fy = 0;
+        document.addEventListener('mousemove', e => {
+            mx = e.clientX; my = e.clientY;
+            cur.style.left = mx + 'px'; cur.style.top = my + 'px';
+        });
+        (function loop() {
+            fx += (mx - fx) * 0.12; fy += (my - fy) * 0.12;
+            fol.style.left = fx + 'px'; fol.style.top = fy + 'px';
+            requestAnimationFrame(loop);
+        })();
+        document.querySelectorAll('a, button, input, textarea, select, .faq-question, .contact-card, .priority-badge').forEach(el => {
+            el.addEventListener('mouseenter', () => { cur.classList.add('hovered'); fol.classList.add('hovered'); });
+            el.addEventListener('mouseleave', () => { cur.classList.remove('hovered'); fol.classList.remove('hovered'); });
         });
 
-        const data = await res.json();
-        alert(data.message);
+        // Header
+        window.addEventListener('scroll', () => {
+            document.getElementById('header').classList.toggle('scrolled', window.scrollY > 40);
+            document.getElementById('scrollTop').classList.toggle('show', window.scrollY > 200);
+        });
+        document.getElementById('scrollTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-        if (res.ok) {
-          e.target.reset();
+        // Mobile menu
+        const menuIcons = document.getElementById('menuIcons');
+        const navbar = document.getElementById('navbar');
+        menuIcons.addEventListener('click', () => {
+            menuIcons.classList.toggle('active');
+            navbar.classList.toggle('open');
+        });
+        navbar.querySelectorAll('.nav-link').forEach(l => l.addEventListener('click', () => {
+            menuIcons.classList.remove('active');
+            navbar.classList.remove('open');
+        }));
+
+        // Scroll reveal
+        const obs = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+        document.querySelectorAll('.reveal, .stagger').forEach(el => obs.observe(el));
+
+        // Tabs
+        function switchTab(tab, btn) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('tab-' + tab).classList.add('active');
+            document.getElementById('form-type').value = tab;
         }
-      } catch (err) {
-        alert('Error: ' + err.message);
-      }
-    });
-  </script>
+
+        // Priority badges
+        document.querySelectorAll('.priority-badge').forEach(badge => {
+            badge.addEventListener('click', () => {
+                document.querySelectorAll('.priority-badge').forEach(b => b.classList.remove('active'));
+                badge.classList.add('active');
+                document.getElementById('priority').value = badge.dataset.val;
+            });
+        });
+
+        // FAQ toggle
+        function toggleFaq(el) {
+            const item = el.closest('.faq-item');
+            const isOpen = item.classList.contains('open');
+            document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+            if (!isOpen) item.classList.add('open');
+        }
+
+        // FAQ search scroll
+        function scrollToFaq() {
+            document.getElementById('faq-section').scrollIntoView({ behavior: 'smooth' });
+        }
+        document.getElementById('faqSearch').addEventListener('keydown', e => {
+            if (e.key === 'Enter') scrollToFaq();
+        });
+
+        // Validation helper
+        function validate(groupId, check) {
+            const group = document.getElementById(groupId);
+            if (!group) return true;
+            if (!check) { group.classList.add('error'); return false; }
+            group.classList.remove('error'); return true;
+        }
+
+        // Form submit
+        document.getElementById('support-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const message = document.getElementById('message').value.trim();
+
+            let valid = true;
+            valid = validate('group-name', name) && valid;
+            valid = validate('group-email', email && email.includes('@')) && valid;
+            valid = validate('group-message', message) && valid;
+            if (!valid) return;
+
+            const btn = document.querySelector('.btn-submit');
+            btn.innerHTML = '<i class="bx bx-loader-alt" style="animation:spin 0.8s linear infinite"></i> Sending…';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch('/api/support', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name, email, message,
+                        type: document.getElementById('form-type').value
+                    }),
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    document.getElementById('successOverlay').classList.add('show');
+                    e.target.reset();
+                } else {
+                    alert(data.message || 'Something went wrong. Please try again.');
+                }
+            } catch (err) {
+                alert('Error: ' + err.message);
+            }
+
+            btn.innerHTML = '<i class="bx bx-send"></i> Send Message';
+            btn.disabled = false;
+        });
+
+        // Clear errors on input
+        document.querySelectorAll('input, textarea').forEach(el => {
+            el.addEventListener('input', () => el.closest('.form-group')?.classList.remove('error'));
+        });
+
+        // Highlight today's hours
+        const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+        const today = days[new Date().getDay()];
+        document.querySelectorAll('.hours-row').forEach(row => {
+            if (row.querySelector('.day')?.textContent.trim() === today) {
+                row.classList.add('today');
+            } else {
+                row.classList.remove('today');
+            }
+        });
+
+        const style = document.createElement('style');
+        style.textContent = '@keyframes spin { to { transform: rotate(360deg); } }';
+        document.head.appendChild(style);
+    </script>
+
 </body>
 </html>
