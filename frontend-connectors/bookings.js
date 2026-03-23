@@ -1,4 +1,4 @@
-const API = 'http://localhost:3000/api';
+const API = 'https://rento-zstk.onrender.com/api';
 
 document.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);

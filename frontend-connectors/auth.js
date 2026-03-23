@@ -1,4 +1,4 @@
-const API = 'http://localhost:3000/api';
+const API = 'https://rento-zstk.onrender.com/api';
 
 const saveAuth = (token, user) => {
     localStorage.setItem('rento_token', token);
